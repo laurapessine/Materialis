@@ -1,0 +1,59 @@
+<!-- src/main/resources/templates/home.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materialis - Início</title>
+    <!-- Link para CSS centralizado (crie em src/main/resources/static/css/style.css) -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+        header { background: #0056b3; color: #fff; padding: 1rem; }
+        nav { display: flex; gap: 1rem; }
+        nav a { color: #fff; text-decoration: none; font-weight: bold; }
+        .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { margin-bottom: 0.5rem; }
+        .cards { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .card { background: #fff; border-radius: 0.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; min-width: 200px; padding: 1.5rem; text-align: center; }
+        .card h2 { margin-top: 0; }
+        .button { display: inline-block; margin-top: 1rem; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; background: #0056b3; color: #fff; }
+        .button:hover { background: #004494; }
+        footer { text-align: center; padding: 1rem; background: #eee; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/materiais/listar}">Materiais</a>
+            <a th:href="@{/estudantes/listar}">Estudantes</a>
+            <a th:href="@{/emprestimos/listar}">Empréstimos</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Bem-vinda ao Materialis!</h1>
+        <p>Plataforma colaborativa para compartilhamento e empréstimo de materiais acadêmicos.</p>
+
+        <div class="cards">
+            <div class="card">
+                <h2>Materiais</h2>
+                <a th:href="@{/materiais/listar}" class="button">Ver Materiais</a>
+            </div>
+            <div class="card">
+                <h2>Estudantes</h2>
+                <a th:href="@{/estudantes/listar}" class="button">Ver Estudantes</a>
+            </div>
+            <div class="card">
+                <h2>Empréstimos</h2>
+                <a th:href="@{/emprestimos/listar}" class="button">Ver Empréstimos</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 Materialis - Todos os direitos reservados
+    </footer>
+</body>
+</html>
