@@ -20,6 +20,3 @@
 
 ## Motivação e Objetivos
 Este projeto visa fomentar a colaboração entre estudantes, reduzindo desperdício de recursos acadêmicos e promovendo a economia compartilhada no ambiente universitário. Além disso, consolida a aplicação prática de conceitos de engenharia de software, como arquitetura em camadas, segurança, tratamento de erros e testes automatizados.
-
-## teste 1
-Testando
