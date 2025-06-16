@@ -2,17 +2,18 @@ package br.ufscar.dc.dsw.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Material")
 public class Material extends AbstractEntity<Long> {
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.material.titulo}")
     @Column(nullable = false, length = 255)
     private String titulo;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.material.descricao}")
     @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
@@ -22,6 +23,7 @@ public class Material extends AbstractEntity<Long> {
         ELETRONICOS
     }
 
+    @NotNull(message = "{NotNull.material.categoria}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Categoria categoria;
@@ -34,6 +36,7 @@ public class Material extends AbstractEntity<Long> {
         RUIM
     }
 
+    @NotNull(message = "{NotNull.material.estadoConservacao}")
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_conservacao", nullable = false)
     private EstadoConservacao estadoConservacao;
@@ -42,7 +45,7 @@ public class Material extends AbstractEntity<Long> {
     @Column(columnDefinition = "JSON")
     private String fotos;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.material.localRetirada}")
     @Column(name = "local_retirada", nullable = false, length = 255)
     private String localRetirada;
 
@@ -62,8 +65,6 @@ public class Material extends AbstractEntity<Long> {
     protected void onUpdate() {
         this.atualizadoEm = LocalDateTime.now();
     }
-
-    // Getters e setters
 
     public String getTitulo() {
         return titulo;
