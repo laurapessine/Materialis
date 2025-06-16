@@ -26,7 +26,7 @@ CREATE TABLE Estudante(
     CPF INT(11) NOT NULL,
     RA INT(6) NOT NULL,
     telefone INT(11) NOT NULL,
-    sexo ENUM('Feminino', 'Masculino', 'Outro') NOT NULL,
+    sexo ENUM('feminino', 'masculino', 'outro') NOT NULL,
     nascimento INT(8) NOT NULL);
 
-INSERT INTO Estudante(nome, email, senha, CPF, RA, telefone, sexo, nascimento) VALUES ('admin','admin@gmail.com','admin', 12345678910, 82000, 16912345678, 'Feminino', 11032000);
+INSERT INTO Estudante(nome, email, senha, CPF, RA, telefone, sexo, nascimento) VALUES ('admin', 'admin@gmail.com', 'admin', 12345678910, 82000, 16912345678, 'feminino', 11032000);
