@@ -17,7 +17,7 @@ public class MaterialService implements IMaterialService {
 
     @Override
     public Material buscarPorId(Long id) {
-        return dao.findById(id);
+        return dao.findById(id).orElse(null);
     }
 
     @Override
