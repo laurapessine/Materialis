@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${#strings.capitalize(activeTab == 'cadastrar' ? 'Cadastrar Material' : 'Editar Material')}">Cadastro Material</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body th:replace="../layout :: layout (~{::body})">
+<section th:fragment="content">
+    <h2 th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'"></h2>
+    <form th:action="@{/materiais/salvar}" th:object="${material}" method="post">
+        <div>
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material" />
+            <div class="error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        </div>
+        <div>
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição do material"></textarea>
+            <div class="error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        </div>
+        <div>
+            <label for="categoria">Categoria</label>
+            <select id="categoria" th:field="*{categoria}">
+                <option value="" disabled selected>-- Selecione --</option>
+                <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
+                        th:value="${cat}" th:text="${cat}"></option>
+            </select>
+            <div class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
+        </div>
+        <div>
+            <label for="estadoConservacao">Estado de Conservação</label>
+            <select id="estadoConservacao" th:field="*{estadoConservacao}">
+                <option value="" disabled selected>-- Selecione --</option>
+                <option th:each="ec : ${T(br.ufscar.dc.dsw.domain.Material.EstadoConservacao).values()}"
+                        th:value="${ec}" th:text="${ec}"></option>
+            </select>
+            <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
+        </div>
+        <div>
+            <label for="fotos">URLs das Fotos (JSON)</label>
+            <input type="text" id="fotos" th:field="*{fotos}" placeholder="[\"url1\", \"url2\"]" />
+            <small>Informe um array JSON com as URLs.</small>
+        </div>
+        <div>
+            <label for="localRetirada">Local de Retirada</label>
+            <input type="text" id="localRetirada" th:field="*{localRetirada}" placeholder="Local onde retirar" />
+            <div class="error" th:if="${#fields.hasErrors('localRetirada')}" th:errors="*{localRetirada}"></div>
+        </div>
+        <div>
+            <button type="submit">Salvar</button>
+            <a th:href="@{/materiais/listar}">Cancelar</a>
+        </div>
+    </form>
+</section>
+</body>
+</html>

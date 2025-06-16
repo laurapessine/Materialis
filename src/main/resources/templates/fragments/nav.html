@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- fragments/nav.html -->
+<div th:fragment="nav">
+  <nav class="nav-bar">
+    <a th:href="@{/}" class="nav-logo">Materialis</a>
+    <ul class="nav-list">
+      <li><a th:href="@{/materiais/listar}">Explorar</a></li>
+      <li th:if="${#request.userPrincipal != null}">
+        <a th:href="@{/materiais/meus-materiais}" 
+           th:classappend="${activeTab == 'meusMateriais'} ? 'active'">
+           Meus Materiais
+        </a>
+      </li>
+      <li th:if="${#request.userPrincipal != null}">
+        <a th:href="@{/emprestimos/meus-emprestimos}" 
+           th:classappend="${activeTab == 'meusEmprestimos'} ? 'active'">
+           Meus Empréstimos
+        </a>
+      </li>
+      <li th:if="${#request.userPrincipal == null}">
+        <a th:href="@{/login}">Login</a>
+      </li>
+      <li th:if="${#request.userPrincipal != null}">
+        <a th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</div>

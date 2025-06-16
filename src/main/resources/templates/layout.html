@@ -1,0 +1,18 @@
+<!-- Este é o "esqueleto" de todas as páginas -->
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:replace="${title}">Materialis</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="fragments/nav :: nav(~{::body})"></div>
+    <main class="container">
+        <section th:insert="${content}"></section>
+    </main>
+    <footer class="footer">
+        <p>© 2025 Materialis</p>
+    </footer>
+</body>
+</html>
