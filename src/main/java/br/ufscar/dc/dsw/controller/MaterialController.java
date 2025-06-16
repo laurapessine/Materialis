@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/materiais")
 public class MaterialController {
@@ -18,8 +20,19 @@ public class MaterialController {
     private IMaterialService service;
 
     @GetMapping("/listar")
-    public String listar(ModelMap model) {
-        model.addAttribute("materiais", service.buscarTodos());
+    public String listar(
+            @RequestParam(value = "categoria", required = false) String categoria,
+            @RequestParam(value = "palavra", required = false) String palavra,
+            ModelMap model) {
+        List<Material> materiais;
+        if (categoria != null && !categoria.isBlank()) {
+            materiais = service.buscarPorCategoria(categoria);
+        } else if (palavra != null && !palavra.isBlank()) {
+            materiais = service.buscarPorPalavraChave(palavra);
+        } else {
+            materiais = service.buscarTodos();
+        }
+        model.addAttribute("materiais", materiais);
         return "material/lista";
     }
 
@@ -34,7 +47,7 @@ public class MaterialController {
             return "material/cadastro";
         }
         service.salvar(material);
-        attr.addFlashAttribute("sucesso", "Material cadastrado com sucesso.");
+        attr.addFlashAttribute("sucesso", "{msg.sucesso.material.salvar}");
         return "redirect:/materiais/listar";
     }
 
@@ -50,14 +63,14 @@ public class MaterialController {
             return "material/cadastro";
         }
         service.salvar(material);
-        attr.addFlashAttribute("sucesso", "Material atualizado com sucesso.");
+        attr.addFlashAttribute("sucesso", "{msg.sucesso.material.editar}");
         return "redirect:/materiais/listar";
     }
 
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable Long id, ModelMap model) {
         service.excluir(id);
-        model.addAttribute("sucesso", "Material excluído com sucesso.");
-        return listar(model);
+        model.addAttribute("sucesso", "{msg.sucesso.material.excluir}");
+        return listar(null, null, model);
     }
 }
