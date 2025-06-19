@@ -36,4 +36,9 @@ public class EstudanteService implements IEstudanteService {
     public Estudante buscarPorCPF(String cpf){
         return dao.findByCPF(cpf);
     }
+
+    @Transactional(readOnly = true)
+	public boolean estudanteTemMaterial(Long id) {
+		return !dao.findById(id.longValue()).getMateriais().isEmpty(); 
+	}
 }

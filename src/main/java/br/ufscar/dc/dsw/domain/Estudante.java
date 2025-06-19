@@ -1,8 +1,10 @@
 package br.ufscar.dc.dsw.domain;
 
+import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.EnumType;
 import jakarta.validation.constraints.NotNull;
@@ -52,6 +54,9 @@ public class Estudante extends AbstractEntity<Long>{
     @NotNull(message = "{NotNull.estudante.nascimento}")
 	@Column(nullable = false, length = 60)
 	private String nascimento;
+
+	@OneToMany(mappedBy = "estudante")
+	private List<Material> materiais;
 
     public enum Sexo{
         Feminino,
@@ -121,5 +126,13 @@ public class Estudante extends AbstractEntity<Long>{
 
 	public void setNascimento(String nascimento) {
 		this.nascimento = nascimento;
+	}
+
+	public List<Material> getMateriais() {
+		return materiais;
+	}
+
+	public void setMateriais(List<Material> materiais) {
+		this.materiais = materiais;
 	}
 }
