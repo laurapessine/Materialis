@@ -1,0 +1,107 @@
+/* Reset mínimo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container centralizado */
+.container {
+  max-width: 960px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+/* Nav Bar */
+.nav-bar {
+  background: #2c3e50;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 2rem;
+  color: #ecf0f1;
+  text-decoration: none;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-list a {
+  color: #bdc3c7;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.nav-list a:hover,
+.nav-list a.active {
+  background: #34495e;
+  color: #ecf0f1;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: #f4f4f4;
+  margin-top: 2rem;
+}
+
+/* Tabelas e formulários (exemplo) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+table th, table td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+form label {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+form input, form select, form textarea {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form .error {
+  color: #c0392b;
+  font-size: 0.85rem;
+}
+
+/* Abas específicas (se quiser estilo de abas) */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  border-bottom: 2px solid #2c3e50;
+  font-weight: bold;
+}
