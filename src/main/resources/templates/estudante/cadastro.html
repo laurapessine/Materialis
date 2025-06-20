@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+
+		<nav class="navbar navbar-expand-md bg-light">
+			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><i class="oi oi-caret-right"></i>
+						<span>Cadastrar Estudantes</span></li>
+				</ul>
+				<a class="btn btn-primary btn-md" th:href="@{/estudantes/listar}"
+					role="button"> <span class="oi oi-spreadsheet" title="Listar"
+					aria-hidden="true"></span> <span>Listar Estudantes</span>
+				</a>
+			</div>
+		</nav>
+
+		<div class="container" id="cadastro">
+
+			<div th:replace="fragments/alert"></div>
+
+			<form
+				th:action="${estudante.id == null} ? @{/estudantes/salvar} : @{/estudantes/editar}"
+				th:object="${estudante}" method="POST">
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="nome">Nome</label> 
+						<input type="text" class="form-control" id="nome" placeholder="Nome"
+							autofocus="autofocus" th:field="*{nome}"
+							th:classappend="${#fields.hasErrors('nome')} ? is-invalid" />
+
+						<div class="invalid-feedback">
+							<span th:errors="*{nome}"></span>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="CPF">CPF</label> 
+						<input type="text" class="form-control" id="CPF" placeholder="___.___.___-__"
+							autofocus="autofocus" th:field="*{CPF}"
+							th:classappend="${#fields.hasErrors('CPF')} ? is-invalid" 
+							data-mask="000.000.000-00" data-mask-reverse="true" />
+						                               
+						<div class="invalid-feedback">
+							<span th:errors="*{CPF}"></span>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" id="id" th:field="*{id}" />
+				<button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+			</form>
+		</div>
+	</section>
+</body>
+</html>

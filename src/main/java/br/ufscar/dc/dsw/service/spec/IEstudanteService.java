@@ -9,4 +9,5 @@ public interface IEstudanteService {
     Estudante buscarPorCPF(String cpf);
 	void salvar(Estudante estudante);
 	void excluir(Long id);
+    boolean estudanteTemMaterial(Long id);
 }

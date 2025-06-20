@@ -92,7 +92,7 @@ public class Estudante extends AbstractEntity<Long>{
 		return cpf;
 	}
 
-	public void setSCPF(String cpf) {
+	public void setCPF(String cpf) {
 		this.cpf = cpf;
 	}
 
