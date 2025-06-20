@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,9 +37,13 @@ public class EstudanteController {
 		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
-		
-		service.salvar(estudante);
-		attr.addFlashAttribute("sucess", "Estudante inserida com sucesso.");
+		try {
+			service.salvar(estudante);
+			attr.addFlashAttribute("sucess", "Estudante inserido com sucesso.");
+		} catch (DataIntegrityViolationException e) {
+			result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
+			return "estudante/cadastro";
+		}
 		return "redirect:/estudantes/listar";
 	}
 	
