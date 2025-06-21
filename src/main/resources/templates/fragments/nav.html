@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<!-- fragments/nav.html -->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="nav">
   <nav class="nav-bar">
     <a th:href="@{/}" class="nav-logo">Materialis</a>
     <ul class="nav-list">
       <li><a th:href="@{/materiais/listar}">Explorar</a></li>
-      <li th:if="${#request.userPrincipal != null}">
+      <li sec:authorize="hasRole('USER')">
         <a th:href="@{/materiais/meus-materiais}" 
            th:classappend="${activeTab == 'meusMateriais'} ? 'active'">
            Meus Materiais
         </a>
       </li>
-      <li th:if="${#request.userPrincipal != null}">
+      <li sec:authorize="hasRole('USER')">
         <a th:href="@{/emprestimos/meus-emprestimos}" 
            th:classappend="${activeTab == 'meusEmprestimos'} ? 'active'">
            Meus Empréstimos
         </a>
       </li>
-      <li th:if="${#request.userPrincipal == null}">
+      <li sec:authorize="hasRole('USER')">
+        <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}"
+           th:classappend="${activeTab == 'gerenciarSolicitacoes'} ? 'active'">
+           Gerenciar Solicitações
+        </a>
+      </li>
+      <li sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/estudantes/listar}">Gerenciar Estudantes</a>
+      </li>
+      <li sec:authorize="!isAuthenticated()">
         <a th:href="@{/login}">Login</a>
       </li>
-      <li th:if="${#request.userPrincipal != null}">
+      <li sec:authorize="isAuthenticated()">
         <a th:href="@{/logout}">Logout</a>
       </li>
     </ul>

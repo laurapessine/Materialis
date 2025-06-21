@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "Estudante")
 
 public class Estudante extends AbstractEntity<Long>{
-    
+
     @NotNull(message = "{NotNull.estudante.nome}")
 	@Size(max = 256)
 	@Column(nullable = false, length = 256)
@@ -25,12 +25,12 @@ public class Estudante extends AbstractEntity<Long>{
 	@Size(max = 200)
 	@Column(nullable = false,unique = true, length = 200)
 	private String email;
-    
+
 	@NotNull(message = "{NotNull.estudante.senha}")
     @Size(max = 15)
 	@Column(nullable = false, length = 15)
 	private String senha;
-	
+
 	@NotNull(message = "{NotNull.estudante.cpf}")
     @Size(min = 11, max = 11, message = "{Size.estudante.cpf}")
 	@Column(nullable = false, unique = true, length = 11)
@@ -57,6 +57,9 @@ public class Estudante extends AbstractEntity<Long>{
 
 	@OneToMany(mappedBy = "estudante")
 	private List<Material> materiais;
+
+    @OneToMany(mappedBy = "estudante")
+    private List<Emprestimo> emprestimosSolicitados;
 
     public enum Sexo{
         Feminino,
@@ -87,7 +90,7 @@ public class Estudante extends AbstractEntity<Long>{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-    
+
     public String getCPF() {
 		return cpf;
 	}
@@ -135,4 +138,12 @@ public class Estudante extends AbstractEntity<Long>{
 	public void setMateriais(List<Material> materiais) {
 		this.materiais = materiais;
 	}
+
+    public List<Emprestimo> getEmprestimosSolicitados() {
+        return emprestimosSolicitados;
+    }
+
+    public void setEmprestimosSolicitados(List<Emprestimo> emprestimosSolicitados) {
+        this.emprestimosSolicitados = emprestimosSolicitados;
+    }
 }

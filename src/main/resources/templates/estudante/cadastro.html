@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html layout:decorate="~{layout}">
 <head>
 <meta charset="UTF-8" />
@@ -26,7 +27,7 @@
 			<form
 				th:action="${estudante.id == null} ? @{/estudantes/salvar} : @{/estudantes/editar}"
 				th:object="${estudante}" method="POST">
-				
+
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="nome">Nome</label> 
@@ -40,14 +41,84 @@
 					</div>
 
 					<div class="form-group col-md-6">
+						<label for="email">E-mail</label> 
+						<input type="email" class="form-control" id="email" placeholder="email@email.com"
+							th:field="*{email}"
+							th:classappend="${#fields.hasErrors('email')} ? is-invalid" />
+						<div class="invalid-feedback">
+							<span th:errors="*{email}"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="senha">Senha</label> 
+						<input type="password" class="form-control" id="senha" placeholder="Senha"
+							th:field="*{senha}"
+							th:classappend="${#fields.hasErrors('senha')} ? is-invalid" />
+						<div class="invalid-feedback">
+							<span th:errors="*{senha}"></span>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6">
 						<label for="CPF">CPF</label> 
 						<input type="text" class="form-control" id="CPF" placeholder="___.___.___-__"
-							autofocus="autofocus" th:field="*{CPF}"
+							th:field="*{CPF}"
 							th:classappend="${#fields.hasErrors('CPF')} ? is-invalid" 
 							data-mask="000.000.000-00" data-mask-reverse="true" />
-						                               
 						<div class="invalid-feedback">
 							<span th:errors="*{CPF}"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="ra">RA</label> 
+						<input type="text" class="form-control" id="ra" placeholder="______"
+							th:field="*{RA}"
+							th:classappend="${#fields.hasErrors('RA')} ? is-invalid" 
+							data-mask="000000" />
+						<div class="invalid-feedback">
+							<span th:errors="*{RA}"></span>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="telefone">Telefone</label> 
+						<input type="text" class="form-control" id="telefone" placeholder="(XX)XXXXX-XXXX"
+							th:field="*{telefone}"
+							th:classappend="${#fields.hasErrors('telefone')} ? is-invalid" 
+							data-mask="(00)00000-0000" />
+						<div class="invalid-feedback">
+							<span th:errors="*{telefone}"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="sexo">Sexo</label> 
+						<select class="form-control" id="sexo" th:field="*{sexo}"
+							th:classappend="${#fields.hasErrors('sexo')} ? is-invalid">
+							<option value="">Selecione...</option>
+							<option th:each="s : ${T(br.ufscar.dc.dsw.domain.Estudante.Sexo).values()}"
+									th:value="${s}" th:text="${s.name()}"></option>
+						</select>
+						<div class="invalid-feedback">
+							<span th:errors="*{sexo}"></span>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="nascimento">Data de Nascimento</label> 
+						<input type="date" class="form-control" id="nascimento"
+							th:field="*{nascimento}"
+							th:classappend="${#fields.hasErrors('nascimento')} ? is-invalid" />
+						<div class="invalid-feedback">
+							<span th:errors="*{nascimento}"></span>
 						</div>
 					</div>
 				</div>

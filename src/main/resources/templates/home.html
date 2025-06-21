@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,9 +47,10 @@
         <header>
             <nav class="container">
                 <a th:href="@{/}">Home</a>
-                <a th:href="@{/materiais/listar}">Materiais</a>
-                <a th:href="@{/estudantes/listar}">Estudantes</a>
-                <a th:href="@{/emprestimos/listar}">Empréstimos</a>
+                <a th:href="@{/materiais/listar}">Explorar Materiais</a>
+                <a th:href="@{/estudantes/listar}">Gerenciar Estudantes</a> <a th:href="@{/materiais/meus-materiais}">Meus Materiais</a>
+                <a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a>
+                <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Gerenciar Solicitações</a>
             </nav>
         </header>
         <main class="container">
@@ -57,16 +58,28 @@
             <p>Plataforma colaborativa para compartilhamento e empréstimo de materiais acadêmicos.</p>
             <div class="cards">
                 <div class="card">
-                    <h2>Materiais</h2>
+                    <h2>Explorar Materiais</h2>
+                    <p>Encontre materiais disponíveis para empréstimo.</p>
                     <a th:href="@{/materiais/listar}" class="button">Ver Materiais</a>
                 </div>
                 <div class="card">
-                    <h2>Estudantes</h2>
-                    <a th:href="@{/estudantes/listar}" class="button">Ver Estudantes</a>
+                    <h2>Meus Materiais</h2>
+                    <p>Gerencie os materiais que você disponibilizou.</p>
+                    <a th:href="@{/materiais/meus-materiais}" class="button">Meus Materiais</a>
                 </div>
                 <div class="card">
-                    <h2>Empréstimos</h2>
-                    <a th:href="@{/emprestimos/listar}" class="button">Ver Empréstimos</a>
+                    <h2>Meus Empréstimos</h2>
+                    <p>Acompanhe suas solicitações de empréstimo.</p>
+                    <a th:href="@{/emprestimos/meus-emprestimos}" class="button">Meus Empréstimos</a>
+                </div>
+                <div class="card">
+                    <h2>Gerenciar Solicitações</h2>
+                    <p>Aprove ou recuse pedidos de empréstimo para seus materiais.</p>
+                    <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}" class="button">Gerenciar</a>
+                </div>
+                <div class="card" sec:authorize="hasRole('ADMIN')"> <h2>Gerenciar Estudantes</h2>
+                    <p>Gerencie os usuários do sistema (Admin).</p>
+                    <a th:href="@{/estudantes/listar}" class="button">Ver Estudantes</a>
                 </div>
             </div>
         </main>
