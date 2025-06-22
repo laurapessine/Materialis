@@ -1,14 +1,19 @@
 package br.ufscar.dc.dsw.domain;
 
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.EnumType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity
@@ -16,56 +21,58 @@ import jakarta.validation.constraints.Size;
 
 public class Estudante extends AbstractEntity<Long>{
 
-    @NotNull(message = "{NotNull.estudante.nome}")
-	@Size(max = 256)
+    @NotBlank(message = "{NotBlank.estudante.nome}")
+	@Size(max = 256, message = "{Size.estudante.nome}")
 	@Column(nullable = false, length = 256)
 	private String nome;
 
-	@NotNull(message = "{NotNull.estudante.email}")
-	@Size(max = 200)
-	@Column(nullable = false,unique = true, length = 200)
+	@NotBlank(message = "{NotBlank.estudante.email}")
+	@Email(message = "{Email.estudante.email}")
+	@Size(max = 200, message = "{Size.estudante.email}")
+	@Column(nullable = false, unique = true, length = 200)
 	private String email;
 
-	@NotNull(message = "{NotNull.estudante.senha}")
-    @Size(max = 15)
+	@NotBlank(message = "{NotBlank.estudante.senha}")
+    @Size(min = 6, max = 15, message = "{Size.estudante.senha}")
 	@Column(nullable = false, length = 15)
 	private String senha;
 
-	@NotNull(message = "{NotNull.estudante.cpf}")
-    @Size(min = 11, max = 11, message = "{Size.estudante.cpf}")
+	@NotBlank(message = "{NotBlank.estudante.cpf}")
+    @Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.cpf}")
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
 
-    @NotNull(message = "{NotNull.estudante.ra}")
-    @Size(min = 6, max = 6, message = "{Size.estudante.ra}")
+    @NotBlank(message = "{NotBlank.estudante.ra}")
+    @Pattern(regexp = "\\d{6}", message = "{Pattern.estudante.ra}")
 	@Column(nullable = false, unique = true, length = 6)
 	private String ra;
 
-    @NotNull(message = "{NotNull.estudante.telefone}")
-    @Size(min = 11, max = 11, message = "{Size.estudante.telefone}")
+    @NotBlank(message = "{NotBlank.estudante.telefone}")
+    @Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.telefone}")
 	@Column(nullable = false, unique = true, length = 11)
 	private String telefone;
+
+    public enum Sexo {
+        Feminino,
+        Masculino,
+        Outro
+    }
 
     @NotNull(message = "{NotNull.estudante.sexo}")
     @Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
-	private String sexo;
+	private Sexo sexo;
 
     @NotNull(message = "{NotNull.estudante.nascimento}")
-	@Column(nullable = false, length = 60)
-	private String nascimento;
+	@Past(message = "{Past.estudante.nascimento}")
+	@Column(nullable = false)
+	private LocalDate nascimento;
 
 	@OneToMany(mappedBy = "estudante")
 	private List<Material> materiais;
 
     @OneToMany(mappedBy = "estudante")
     private List<Emprestimo> emprestimosSolicitados;
-
-    public enum Sexo{
-        Feminino,
-        Masculino,
-        Outro
-    }
 
 	public String getNome() {
 		return nome;
@@ -91,19 +98,19 @@ public class Estudante extends AbstractEntity<Long>{
 		this.senha = senha;
 	}
 
-    public String getCPF() {
+    public String getCpf() {
 		return cpf;
 	}
 
-	public void setCPF(String cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-    public String getRA() {
+    public String getRa() {
 		return ra;
 	}
 
-	public void setRA(String ra) {
+	public void setRa(String ra) {
 		this.ra = ra;
 	}
 
@@ -115,19 +122,19 @@ public class Estudante extends AbstractEntity<Long>{
 		this.telefone = telefone;
 	}
 
-    public String getSexo() {
+    public Sexo getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(String sexo) {
+	public void setSexo(Sexo sexo) {
 		this.sexo = sexo;
 	}
 
-    public String getNascimento() {
+    public LocalDate getNascimento() {
 		return nascimento;
 	}
 
-	public void setNascimento(String nascimento) {
+	public void setNascimento(LocalDate nascimento) {
 		this.nascimento = nascimento;
 	}
 
