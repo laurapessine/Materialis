@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:fragment="layout(pageTitle, bodyContent)">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title th:text="${pageTitle}">Materialis</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <meta charset="UTF-8"/>
+  <title th:text="${pageTitle}">Materialis</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-    <div th:replace="fragments/nav :: nav"></div>
-    <main class="container">
-        <div th:insert="${bodyContent}"></div>
-    </main>
-    <footer class="footer">
-        <p>© 2025 Materialis</p>
-    </footer>
+  <div th:replace="~{fragments/nav :: nav}"></div>
+  <main class="container">
+    <div th:insert="${bodyContent}"></div>
+  </main>
+  <footer class="footer">
+    <p>© 2025 Materialis</p>
+  </footer>
 </body>
 </html>

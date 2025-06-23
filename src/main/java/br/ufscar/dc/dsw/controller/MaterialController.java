@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -81,14 +82,14 @@ public class MaterialController {
 
         try {
             materialService.salvar(material);
-            String msg = messageSource.getMessage("msg.sucesso.material.salvar", null, null);
+            String msg = messageSource.getMessage("msg.sucesso.material.salvar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
         } catch (Exception e) {
             // exemplo: BusinessException com código em e.getMessage()
             String code = e.getMessage();
             if ("material.titulo.duplicado".equals(code)) {
                 result.rejectValue("titulo", "error.material.titulo.duplicado",
-                        messageSource.getMessage("error.material.titulo.duplicado", null, null));
+                        messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
             } else {
                 // mensagem genérica
                 result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault())
@@ -103,13 +104,13 @@ public class MaterialController {
     public String preEditar(@PathVariable Long id, ModelMap model, Principal principal, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(id);
         if (material == null) {
-            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, null));
+            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
             return "redirect:/materiais/listar";
         }
         // verifica se o dono é o usuário logado
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         if (!material.getEstudante().getId().equals(dono.getId())) {
-            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.autorizado", null, null));
+            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.autorizado", null, LocaleContextHolder.getLocale()));
             return "redirect:/materiais/listar";
         }
         model.addAttribute("material", material);
@@ -128,13 +129,13 @@ public class MaterialController {
 
         try {
             materialService.salvar(material);
-            String msg = messageSource.getMessage("msg.sucesso.material.editar", null, null);
+            String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
         } catch (Exception e) {
             String code = e.getMessage();
             if ("material.titulo.duplicado".equals(code)) {
-                result.rejectValue("titulo", "error.material.titulo.duplicado",
-                        messageSource.getMessage("error.material.titulo.duplicado", null, null));
+                result.rejectValue("titulo", "error.material.titulo.duplicado", 
+                messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
             } else {
                 result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault())
 );
@@ -148,20 +149,20 @@ public class MaterialController {
     public String excluir(@PathVariable Long id, ModelMap model, Principal principal, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(id);
         if (material == null) {
-            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, null));
+            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
             return "redirect:/materiais/listar";
         }
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         if (!material.getEstudante().getId().equals(dono.getId())) {
-            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.autorizado", null, null));
+            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.autorizado", null, LocaleContextHolder.getLocale()));
             return "redirect:/materiais/listar";
         }
         try {
             materialService.excluir(id);
-            String msg = messageSource.getMessage("msg.sucesso.material.excluir", null, null);
+            String msg = messageSource.getMessage("msg.sucesso.material.excluir", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
         } catch (Exception e) {
-            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.vinculado", null, null));
+            attr.addFlashAttribute("fail", messageSource.getMessage("error.material.vinculado", null, LocaleContextHolder.getLocale()));
         }
         return "redirect:/materiais/listar";
     }

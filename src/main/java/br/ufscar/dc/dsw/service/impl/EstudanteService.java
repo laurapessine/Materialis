@@ -9,19 +9,22 @@ import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = false)
+@Transactional
 public class EstudanteService implements IEstudanteService {
+
     @Autowired
-	IEstudanteDAO dao;
-	
-	public void salvar(Estudante estudante) {
-		dao.save(estudante);
-	}
-	
-	public void excluir(Long id) {
-		dao.deleteById(id);
-	}
-	
+    private IEstudanteDAO dao;
+
+    @Override
+    public void salvar(Estudante estudante) {
+        dao.save(estudante);
+    }
+
+    @Override
+    public void excluir(Long id) {
+        dao.deleteById(id);
+    }
+
     @Override
     public Estudante buscarPorId(Long id) {
         return dao.findById(id).orElse(null);
@@ -33,12 +36,20 @@ public class EstudanteService implements IEstudanteService {
     }
 
     @Override
-    public Estudante buscarPorCPF(String cpf){
+    public Estudante buscarPorCPF(String cpf) {
         return dao.findByCpf(cpf);
     }
 
+    @Override
+    public Estudante buscarPorEmail(String email) {
+        return dao.findByEmail(email);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-	public boolean estudanteTemMaterial(Long id) {
-		return !dao.findById(id.longValue()).getMateriais().isEmpty(); 
-	}
+    public boolean estudanteTemMaterial(Long id) {
+        return dao.findById(id)
+                 .map(e -> !e.getMateriais().isEmpty())
+                 .orElse(false);
+    }
 }

@@ -18,8 +18,7 @@ public abstract class AbstractEntity<ID extends Serializable> implements Seriali
 		return id;
 	}
 	
-	// Setter protegido para evitar uso indevido
-	protected void setId(ID id) {
+	public void setId(ID id) {
 		this.id = id;
 	}
 

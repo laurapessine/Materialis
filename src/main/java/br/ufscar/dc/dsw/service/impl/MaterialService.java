@@ -57,6 +57,9 @@ public class MaterialService implements IMaterialService {
 
     @Override
     public void salvar(Material material) {
+        if (material.getFotos() != null && material.getFotos().isBlank()) {
+            material.setFotos(null);
+        }
         dao.save(material);
     }
 

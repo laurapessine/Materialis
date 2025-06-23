@@ -1,27 +1,55 @@
+<!-- src/main/resources/templates/material/lista.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Listagem de Materiais</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
     <h1>Materiais Disponíveis</h1>
     <table>
         <thead>
-            <tr><th>ID</th><th>Título</th><th>Categoria</th><th>Ações</th></tr>
+            <tr>
+                <th>ID</th>
+                <th th:text="#{material.titulo.label}">Título</th>
+                <th th:text="#{material.descricao.label}">Descrição</th>
+                <th th:text="#{material.categoria.label}">Categoria</th>
+                <th th:text="#{material.estadoConservacao.label}">Estado</th>
+                <th th:text="#{material.fotos.label}">Fotos</th>
+                <th th:text="#{material.localRetirada.label}">Local de Retirada</th>
+                <th>Data de Criação</th>
+                <th>Data de Atualização</th>
+                <th>Dono</th>
+                <th>Ações</th>
+            </tr>
         </thead>
         <tbody>
             <tr th:each="m : ${materiais}">
                 <td th:text="${m.id}">1</td>
                 <td th:text="${m.titulo}">Título</td>
-                <td th:text="${m.categoria}">Categoria</td>
+                <td th:text="${m.descricao}">Descrição</td>
+                <td th:text="#{${'material.categoria.' + m.categoria}}">Categoria</td>
+                <td th:text="#{${'material.estadoConservacao.' + m.estadoConservacao}}">Estado</td>
+                <td>
+                    <span th:if="${m.fotos != null}" th:text="${m.fotos}">["url1","url2"]</span>
+                    <span th:if="${m.fotos == null}">-</span>
+                </td>
+                <td th:text="${m.localRetirada}">Local</td>
+                <td th:text="${#temporals.format(m.criadoEm, 'dd/MM/yyyy HH:mm')}">01/01/2025 12:00</td>
+                <td th:text="${#temporals.format(m.atualizadoEm, 'dd/MM/yyyy HH:mm')}">02/01/2025 15:30</td>
+                <td th:text="${m.estudante != null ? m.estudante.nome : '-'}">Nome do Dono</td>
                 <td>
                     <a th:href="@{|/materiais/editar/${m.id}|}">Editar</a> |
-                    <a th:href="@{|/materiais/excluir/${m.id}|}">Excluir</a>
+                    <a th:href="@{|/materiais/excluir/${m.id}|}" 
+                       onclick="return confirm('Confirma exclusão do material?');">Excluir</a>
                 </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(materiais)}">
+                <td colspan="11">Nenhum material encontrado.</td>
             </tr>
         </tbody>
     </table>
-    <a th:href="@{/materiais/cadastrar}">Cadastrar novo material</a>
+    <a th:href="@{/materiais/cadastrar}" th:text="#{nav.cadastrarMaterial}">Cadastrar novo material</a>
 </body>
 </html>

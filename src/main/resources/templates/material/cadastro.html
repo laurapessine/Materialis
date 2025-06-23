@@ -1,61 +1,80 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(
-         ${material.id} == null ? 'Cadastrar Material' : 'Editar Material',
-         ~{::content}
-      )}">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta charset="UTF-8"/>
+    <title th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'">Cadastro Material</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-    <div th:fragment="content">
-        <h2 th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'"></h2>
-        <form th:action="@{/materiais/salvar}" th:object="${material}" method="post">
-            <div>
-                <label for="titulo" th:text="#{material.titulo.label}">Título</label>
-                <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material" />
-                <div class="error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-            </div>
-            <div>
-                <label for="descricao" th:text="#{material.descricao.label}">Descrição</label>
-                <textarea id="descricao" th:field="*{descricao}" rows="4"
-                          placeholder="Descrição do material"></textarea>
-                <div class="error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-            </div>
-            <div>
-                <label for="categoria" th:text="#{material.categoria.label}">Categoria</label>
-                <select id="categoria" th:field="*{categoria}">
-                    <option value="" disabled th:if="${material.categoria == null}" selected>-- Selecione --</option>
-                    <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
-                            th:value="${cat}"
-                            th:text="#{material.categoria.${cat}}">Categoria</option>
-                </select>
-                <div class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
-            </div>
-            <div>
-                <label for="estadoConservacao" th:text="#{material.estadoConservacao.label}">Estado de Conservação</label>
-                <select id="estadoConservacao" th:field="*{estadoConservacao}">
-                    <option value="" disabled th:if="${material.estadoConservacao == null}" selected>-- Selecione --</option>
-                    <option th:each="ec : ${T(br.ufscar.dc.dsw.domain.Material.EstadoConservacao).values()}"
-                            th:value="${ec}"
-                            th:text="#{material.estadoConservacao.${ec}}">Estado</option>
-                </select>
-                <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
-            </div>
-            <div>
-                <label for="fotos" th:text="#{material.fotos.label}">Fotos (JSON)</label>
-                <input type="text" id="fotos" th:field="*{fotos}" placeholder="[&quot;url1&quot;, &quot;url2&quot;]" />
-            </div>
-            <div>
-                <label for="localRetirada" th:text="#{material.localRetirada.label}">Local de Retirada</label>
-                <input type="text" id="localRetirada" th:field="*{localRetirada}" placeholder="Local onde retirar" />
-                <div class="error" th:if="${#fields.hasErrors('localRetirada')}" th:errors="*{localRetirada}"></div>
-            </div>
-            <div>
-                <button type="submit" th:text="#{button.salvar}">Salvar</button>
-                <a th:href="@{/materiais/listar}" th:text="#{button.cancelar}">Cancelar</a>
-            </div>
-        </form>
-    </div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}" th:text="#{nav.home}">Home</a></li>
+            <li><a th:href="@{/materiais/listar}" th:text="#{nav.materiais}">Materiais</a></li>
+            <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/cadastrar}" th:text="#{nav.cadastrarMaterial}">Cadastrar Material</a></li>
+            <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/meus-materiais}" th:text="#{nav.meusMateriais}">Meus Materiais</a></li>
+            <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/meus-emprestimos}" th:text="#{nav.meusEmprestimos}">Meus Empréstimos</a></li>
+            <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}" th:text="#{nav.solicitacoesRecebidas}">Solicitações Recebidas</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/estudantes/listar}" th:text="#{nav.estudantes}">Estudantes</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}" th:text="#{nav.logout}">Logout</a></li>
+            <li sec:authorize="isAnonymous()"><a th:href="@{/login}" th:text="#{nav.login}">Login</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section>
+            <h2 th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'">Título</h2>
+            <form th:object="${material}" th:action="${material.id} == null ? @{/materiais/salvar} : @{/materiais/editar}" method="post">
+                <input type="hidden" th:if="${material.id != null}" th:field="*{id}" />
+                <div>
+                    <label for="titulo" th:text="#{material.titulo.label}">Título</label>
+                    <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material"/>
+                    <div class="error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                </div>
+                <div>
+                    <label for="descricao" th:text="#{material.descricao.label}">Descrição</label>
+                    <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição do material"></textarea>
+                    <div class="error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+                </div>
+                <div>
+                    <label for="categoria" th:text="#{material.categoria.label}">Categoria</label>
+                    <select id="categoria" th:field="*{categoria}">
+                        <option value="" disabled th:if="${material.categoria == null}" selected>-- Selecione --</option>
+                        <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
+                                th:value="${cat}"
+                                th:text="#{${'material.categoria.' + cat}}">Categoria</option>
+                    </select>
+                    <div class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
+                </div>
+                <div>
+                    <label for="estadoConservacao" th:text="#{material.estadoConservacao.label}">Estado de Conservação</label>
+                    <select id="estadoConservacao" th:field="*{estadoConservacao}">
+                        <option value="" disabled th:if="${material.estadoConservacao == null}" selected>-- Selecione --</option>
+                        <option th:each="ec : ${T(br.ufscar.dc.dsw.domain.Material.EstadoConservacao).values()}"
+                                th:value="${ec}"
+                                th:text="#{${'material.estadoConservacao.' + ec}}">Estado</option>
+                    </select>
+                    <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
+                </div>
+                <div>
+                    <label for="fotos" th:text="#{material.fotos.label}">URLs das Fotos (JSON)</label>
+                    <input type="text" id="fotos" th:field="*{fotos}" placeholder="[&quot;url1&quot;, &quot;url2&quot;]"/>
+                    <small th:text="#{material.fotos.label} + ' (JSON)'">Informe um array JSON com as URLs.</small>
+                </div>
+                <div>
+                    <label for="localRetirada" th:text="#{material.localRetirada.label}">Local de Retirada</label>
+                    <input type="text" id="localRetirada" th:field="*{localRetirada}" placeholder="Local onde retirar"/>
+                    <div class="error" th:if="${#fields.hasErrors('localRetirada')}" th:errors="*{localRetirada}"></div>
+                </div>
+                <div>
+                    <button type="submit" th:text="#{button.salvar}">Salvar</button>
+                    <a th:href="@{/materiais/listar}" th:text="#{button.cancelar}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Materialis</p>
+    </footer>
 </body>
 </html>
