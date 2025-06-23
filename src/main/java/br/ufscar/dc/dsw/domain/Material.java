@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -17,7 +19,7 @@ import jakarta.validation.constraints.Size;
 public class Material extends AbstractEntity<Long> {
 
     @NotBlank(message = "{NotBlank.material.titulo}")
-    @Size(min = 2, max = 255)
+    @Size(max = 255, message = "{Size.material.titulo}")
     @Column(nullable = false)
     private String titulo;
 
@@ -56,9 +58,15 @@ public class Material extends AbstractEntity<Long> {
     private String fotos;
 
     @NotBlank(message = "{NotBlank.material.localRetirada}")
-    @Size(max = 255)
+    @Size(max = 255, message = "{Size.material.localRetirada}")
     @Column(name = "local_retirada", nullable = false)
     private String localRetirada;
+
+    // Associação com o dono (estudante que cadastrou) - necessária para R9
+    @NotNull(message = "{NotNull.material.dono}")
+    @ManyToOne
+    @JoinColumn(name = "estudante_id", nullable = false)
+    private Estudante dono;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
@@ -123,6 +131,13 @@ public class Material extends AbstractEntity<Long> {
 
     public void setLocalRetirada(String localRetirada) {
         this.localRetirada = localRetirada;
+    }
+
+    public Estudante getDono() {
+        return dono;
+    }
+    public void setDono(Estudante dono) {
+        this.dono = dono;
     }
 
     public LocalDateTime getCriadoEm() {

@@ -1,5 +1,7 @@
 package br.ufscar.dc.dsw;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,34 +13,35 @@ import br.ufscar.dc.dsw.domain.Estudante;
 @SpringBootApplication
 public class MaterialisApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MaterialisApplication.class, args);
-	}
-	@Bean
-    public CommandLineRunner demo(IEstudanteDAO estudanteDAO, PasswordEncoder passwordEncoder) { 
+    public static void main(String[] args) {
+        SpringApplication.run(MaterialisApplication.class, args);
+    }
+
+    @Bean
+    public CommandLineRunner demo(IEstudanteDAO estudanteDAO, PasswordEncoder passwordEncoder) {
         return (args) -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             Estudante e1 = new Estudante();
-            e1.setCpf("123.141.928-23");
+            e1.setCpf("12314192823");
             e1.setNome("Lorena");
             e1.setEmail("lorena@gmail.com");
-            e1.setNascimento("01/02/2000");
+            e1.setNascimento(LocalDate.parse("01/02/2000", formatter));
             e1.setRa("821239");
-            e1.setSenha(passwordEncoder.encode("123abc")); 
-            e1.setSexo("Feminino");
-            e1.setTelefone("(16)1792-3824");
+            e1.setSenha(passwordEncoder.encode("123abc"));
+            e1.setSexo(Estudante.Sexo.Feminino);
+            e1.setTelefone("16179238224");
             estudanteDAO.save(e1);
 
             Estudante e2 = new Estudante();
-            e2.setCpf("182.283.192-01");
+            e2.setCpf("18228319201");
             e2.setNome("Luis");
             e2.setEmail("luis@gmail.com");
-            e2.setNascimento("05/10/1999");
+            e2.setNascimento(LocalDate.parse("05/10/1999", formatter));
             e2.setRa("123456");
             e2.setSenha(passwordEncoder.encode("password"));
-            e2.setSexo("Masculino");
-            e2.setTelefone("(11)98765-4321");
+            e2.setSexo(Estudante.Sexo.Masculino);
+            e2.setTelefone("11987654321");
             estudanteDAO.save(e2);
         };
     }
-
 }
