@@ -34,7 +34,7 @@ public class EstudanteService implements IEstudanteService {
 
     @Override
     public Estudante buscarPorCPF(String cpf){
-        return dao.findByCPF(cpf);
+        return dao.findByCpf(cpf);
     }
 
     @Transactional(readOnly = true)

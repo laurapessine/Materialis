@@ -10,13 +10,16 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class AbstractEntity<ID extends Serializable> implements Serializable {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private ID id;
 
 	public ID getId() {
 		return id;
 	}
-	public void setId(ID id) {
+	
+	// Setter protegido para evitar uso indevido
+	protected void setId(ID id) {
 		this.id = id;
 	}
 
@@ -44,6 +47,7 @@ public abstract class AbstractEntity<ID extends Serializable> implements Seriali
 
 	@Override
 	public String toString() {
-		return "id=" + id;
+		// Na hora de logs ou debug, fica claro qual entidade
+		return String.format("%s[id=%s]", getClass().getSimpleName(), id);
 	}
 }

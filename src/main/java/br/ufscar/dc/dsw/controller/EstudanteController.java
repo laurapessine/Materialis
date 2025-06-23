@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 
 @Controller
 @RequestMapping("/estudantes")
+@PreAuthorize("hasRole('ADMIN')")
 public class EstudanteController {
     @Autowired
 	private IEstudanteService service;
