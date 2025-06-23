@@ -33,8 +33,8 @@ public class Estudante extends AbstractEntity<Long>{
 	private String email;
 
 	@NotBlank(message = "{NotBlank.estudante.senha}")
-    @Size(min = 6, max = 15, message = "{Size.estudante.senha}")
-	@Column(nullable = false, length = 15)
+    @Size(min = 6, max = 60, message = "{Size.estudante.senha}")
+	@Column(nullable = false, length = 60)
 	private String senha;
 
 	@NotBlank(message = "{NotBlank.estudante.cpf}")
