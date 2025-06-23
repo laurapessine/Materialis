@@ -112,7 +112,7 @@ public class EmprestimoController {
             return "redirect:/login";
         }
         model.addAttribute("emprestimos", emprestimoService.buscarPorEstudante(estudante));
-        return "emprestimo/meus-emprestimos"; 
+        return "emprestimo/meus-emprestimos";
     }
 
     @GetMapping("/solicitacoes-para-meus-materiais")

@@ -16,23 +16,8 @@ public class EstudanteService implements IEstudanteService {
     private IEstudanteDAO dao;
 
     @Override
-    public void salvar(Estudante estudante) {
-        dao.save(estudante);
-    }
-
-    @Override
-    public void excluir(Long id) {
-        dao.deleteById(id);
-    }
-
-    @Override
     public Estudante buscarPorId(Long id) {
         return dao.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<Estudante> buscarTodos() {
-        return dao.findAll();
     }
 
     @Override
@@ -46,10 +31,26 @@ public class EstudanteService implements IEstudanteService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public List<Estudante> buscarTodos() {
+        return dao.findAll();
+    }
+
+    @Override
+    public void salvar(Estudante estudante) {
+        dao.save(estudante);
+    }
+
+    @Override
+    public void excluir(Long id) {
+        dao.deleteById(id);
+    }
+
+    @Override
     public boolean estudanteTemMaterial(Long id) {
-        return dao.findById(id)
-                 .map(e -> !e.getMateriais().isEmpty())
-                 .orElse(false);
+        // implementar: verifica se há materiais vinculados a este estudante.
+        // p.ex:
+        // return materialDAO.existsByEstudanteId(id);
+        // ou trazer lista e checar size>0.
+        return false; // ajuste conforme lógica
     }
 }
