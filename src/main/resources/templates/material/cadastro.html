@@ -12,48 +12,48 @@
         <h2 th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'"></h2>
         <form th:action="@{/materiais/salvar}" th:object="${material}" method="post">
             <div>
-                <label for="titulo">Título</label>
+                <label for="titulo" th:text="#{material.titulo.label}">Título</label>
                 <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material" />
                 <div class="error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
             </div>
             <div>
-                <label for="descricao">Descrição</label>
+                <label for="descricao" th:text="#{material.descricao.label}">Descrição</label>
                 <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição do material"></textarea>
                 <div class="error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
             </div>
             <div>
-                <label for="categoria">Categoria</label>
+                <label for="categoria" th:text="#{material.categoria.label}">Categoria</label>
                 <select id="categoria" th:field="*{categoria}">
                     <option value="" disabled th:if="${material.categoria == null}" selected>-- Selecione --</option>
                     <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
                             th:value="${cat}"
-                            th:text="#{material.categoria.${cat}}">Categoria</option>
+                            th:text="#{${'material.categoria.' + cat}}">Categoria</option>
                 </select>
                 <div class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
             </div>
             <div>
-                <label for="estadoConservacao">Estado de Conservação</label>
+                <label for="estadoConservacao" th:text="#{material.estadoConservacao.label}">Estado de Conservação</label>
                 <select id="estadoConservacao" th:field="*{estadoConservacao}">
                     <option value="" disabled th:if="${material.estadoConservacao == null}" selected>-- Selecione --</option>
                     <option th:each="ec : ${T(br.ufscar.dc.dsw.domain.Material.EstadoConservacao).values()}"
                             th:value="${ec}"
-                            th:text="#{material.estadoConservacao.${ec}}">Estado</option>
+                            th:text="#{${'material.estadoConservacao.' + ec}}">Estado</option>
                 </select>
                 <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
             </div>
             <div>
-                <label for="fotos">URLs das Fotos (JSON)</label>
+                <label for="fotos" th:text="#{material.fotos.label}">URLs das Fotos (JSON)</label>
                 <input type="text" id="fotos" th:field="*{fotos}" placeholder="[&quot;url1&quot;, &quot;url2&quot;]" />
-                <small>Informe um array JSON com as URLs.</small>
+                <small th:text="#{material.fotos.label} + ' (JSON)'">Informe um array JSON com as URLs.</small>
             </div>
             <div>
-                <label for="localRetirada">Local de Retirada</label>
+                <label for="localRetirada" th:text="#{material.localRetirada.label}">Local de Retirada</label>
                 <input type="text" id="localRetirada" th:field="*{localRetirada}" placeholder="Local onde retirar" />
                 <div class="error" th:if="${#fields.hasErrors('localRetirada')}" th:errors="*{localRetirada}"></div>
             </div>
             <div>
-                <button type="submit">Salvar</button>
-                <a th:href="@{/materiais/listar}">Cancelar</a>
+                <button type="submit" th:text="#{button.salvar}">Salvar</button>
+                <a th:href="@{/materiais/listar}" th:text="#{button.cancelar}">Cancelar</a>
             </div>
         </form>
     </div>

@@ -1,13 +1,13 @@
 <nav th:fragment="nav" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <ul>
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/materiais/listar}">Materiais</a></li>
-        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/cadastrar}">Cadastrar Material</a></li>
-        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/meus-materiais}">Meus Materiais</a></li>
-        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a></li>
-        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Solicitações Recebidas</a></li>
-        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/estudantes/listar}">Estudantes</a></li>
-        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-        <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+        <li><a th:href="@{/}" th:text="#{nav.home}">Home</a></li>
+        <li><a th:href="@{/materiais/listar}" th:text="#{nav.materiais}">Materiais</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/cadastrar}" th:text="#{nav.cadastrarMaterial}">Cadastrar Material</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/meus-materiais}" th:text="#{nav.meusMateriais}">Meus Materiais</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/meus-emprestimos}" th:text="#{nav.meusEmprestimos}">Meus Empréstimos</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}" th:text="#{nav.solicitacoesRecebidas}">Solicitações Recebidas</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/estudantes/listar}" th:text="#{nav.estudantes}">Estudantes</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}" th:text="#{nav.logout}">Logout</a></li>
+        <li sec:authorize="isAnonymous()"><a th:href="@{/login}" th:text="#{nav.login}">Login</a></li>
     </ul>
 </nav>
