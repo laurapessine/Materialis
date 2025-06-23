@@ -1,8 +1,137 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<html layout:decorate="~{layout}">
 <head>
 <meta charset="UTF-8" />
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			background: #f4f4f4;
+			color: #333;
+			line-height: 1.6;
+		}
+
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #0056b3;
+			color: #fff;
+			padding: 1rem 2rem;
+		}
+
+		nav ul {
+			list-style: none;
+			display: flex;
+			gap: 1rem;
+		}
+
+		nav ul li {
+			display: inline;
+			font-weight: bold;
+		}
+
+		nav a {
+			color: #fff;
+			text-decoration: none;
+			font-weight: bold;
+			padding: 0.5rem 1rem;
+			border-radius: 0.25rem;
+		}
+
+		nav a:hover {
+			background: #004494;
+		}
+
+		.container {
+			max-width: 960px;
+			margin: 2rem auto;
+			padding: 2rem;
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+
+		label {
+			font-weight: bold;
+			margin-bottom: 0.5rem;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 0.5rem;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
+
+		.form-control:focus {
+			border-color: #0056b3;
+			box-shadow: 0 0 4px rgba(0, 86, 179, 0.5);
+			outline: none;
+		}
+
+		.form-group {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 1rem;
+		}
+
+		.btn {
+			display: inline-block;
+			padding: 0.5rem 1rem;
+			border-radius: 4px;
+			font-size: 1rem;
+			font-weight: bold;
+			text-align: center;
+			color: #fff;
+			background: #0056b3;
+			border: none;
+			cursor: pointer;
+		}
+
+		.btn:hover {
+			background: #004494;
+		}
+
+		.btn-primary {
+			background: #0056b3;
+		}
+
+		.btn-primary:hover {
+			background: #004494;
+		}
+
+		.invalid-feedback {
+			color: #dc3545;
+			font-size: 0.875rem;
+			margin-top: 0.5rem;
+		}
+
+		footer {
+			text-align: center;
+			padding: 1rem;
+			background: #0056b3;
+			color: #fff;
+			margin-top: 2rem;
+		}
+	</style>
 </head>
 <body>
 	<section class="layout-content" layout:fragment="corpo">
@@ -10,19 +139,16 @@
 		<nav class="navbar navbar-expand-md bg-light">
 			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><i class="oi oi-caret-right"></i>
+					<li class="nav-item active">
 						<span>Cadastrar Estudantes</span></li>
 				</ul>
-				<a class="btn btn-primary btn-md" th:href="@{/estudantes/listar}"
-					role="button"> <span class="oi oi-spreadsheet" title="Listar"
-					aria-hidden="true"></span> <span>Listar Estudantes</span>
+				<a class="btn btn-primary btn-md" th:href="@{/estudantes/listar}" role="button"> 
+					<span>Listar Estudantes</span>
 				</a>
 			</div>
 		</nav>
 
 		<div class="container" id="cadastro">
-
-			<div th:replace="fragments/alert"></div>
 
 			<form
 				th:action="${estudante.id == null} ? @{/estudantes/salvar} : @{/estudantes/editar}"
@@ -63,13 +189,13 @@
 					</div>
 
 					<div class="form-group col-md-6">
-						<label for="CPF">CPF</label> 
-						<input type="text" class="form-control" id="CPF" placeholder="___.___.___-__"
-							th:field="*{CPF}"
-							th:classappend="${#fields.hasErrors('CPF')} ? is-invalid" 
+						<label for="cpf">CPF</label> 
+						<input type="text" class="form-control" id="cpf" placeholder="___.___.___-__"
+							th:field="*{cpf}"
+							th:classappend="${#fields.hasErrors('cpf')} ? is-invalid" 
 							data-mask="000.000.000-00" data-mask-reverse="true" />
 						<div class="invalid-feedback">
-							<span th:errors="*{CPF}"></span>
+							<span th:errors="*{cpf}"></span>
 						</div>
 					</div>
 				</div>
@@ -78,11 +204,11 @@
 					<div class="form-group col-md-6">
 						<label for="ra">RA</label> 
 						<input type="text" class="form-control" id="ra" placeholder="______"
-							th:field="*{RA}"
-							th:classappend="${#fields.hasErrors('RA')} ? is-invalid" 
+							th:field="*{ra}"
+							th:classappend="${#fields.hasErrors('ra')} ? is-invalid" 
 							data-mask="000000" />
 						<div class="invalid-feedback">
-							<span th:errors="*{RA}"></span>
+							<span th:errors="*{ra}"></span>
 						</div>
 					</div>
 
@@ -128,5 +254,8 @@
 			</form>
 		</div>
 	</section>
+	<footer>
+		&copy; 2025 - Sistema de Gerenciamento de Estudantes
+	</footer>
 </body>
 </html>

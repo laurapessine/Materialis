@@ -61,10 +61,14 @@ public class EstudanteController {
 		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
-
-		service.salvar(estudante);
-		attr.addFlashAttribute("sucess", "Estudante editado com sucesso.");
-		return "redirect:/estudantes/listar";
+		try {
+        	service.salvar(estudante);
+        	attr.addFlashAttribute("sucess", "Estudante editado com sucesso.");
+			return "redirect:/estudantes/listar";
+  		} catch (DataIntegrityViolationException e) {
+        	result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
+        	return "redirect:/estudantes/listar";
+    	}
 	}
 	
 	@GetMapping("/excluir/{id}")
