@@ -33,19 +33,29 @@ public class EmprestimoController {
     @Autowired
     private IMaterialService materialService;
 
+    // private Estudante getLoggedInEstudante() {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     String userEmail = authentication.getName();
+    //     Estudante estudante = estudanteService.buscarPorCPF("123.141.928-23");
+    //     if (estudante == null) {
+    //         if (userEmail.equals("lorena@gmail.com")) {
+    //             return estudanteService.buscarPorCPF("123.141.928-23");
+    //         } else if (userEmail.equals("luis@gmail.com")) {
+    //             return estudanteService.buscarPorCPF("182.283.192-01");
+    //         }
+    //     }
+    //     return estudante;
+    // }
     private Estudante getLoggedInEstudante() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = authentication.getName();
-        Estudante estudante = estudanteService.buscarPorCPF("123.141.928-23");
-        if (estudante == null) {
-            if (userEmail.equals("lorena@gmail.com")) {
-                return estudanteService.buscarPorCPF("123.141.928-23");
-            } else if (userEmail.equals("luis@gmail.com")) {
-                return estudanteService.buscarPorCPF("182.283.192-01");
-            }
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
         }
-        return estudante;
+        String userEmail = authentication.getName();
+        return estudanteService.buscarPorEmail(userEmail);  // buscar pelo email real do usuário
     }
+
+
 
     @GetMapping("/solicitar/{materialId}")
     public String solicitarEmprestimo(@PathVariable("materialId") Long materialId, ModelMap model, RedirectAttributes attr) {

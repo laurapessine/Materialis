@@ -2,6 +2,9 @@ package br.ufscar.dc.dsw.domain;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,6 +69,7 @@ public class Estudante extends AbstractEntity<Long>{
     @NotNull(message = "{NotNull.estudante.nascimento}")
 	@Past(message = "{Past.estudante.nascimento}")
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate nascimento;
 
 	@OneToMany(mappedBy = "estudante")
