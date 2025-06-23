@@ -1,16 +1,24 @@
 package br.ufscar.dc.dsw.domain;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Material")
 public class Material extends AbstractEntity<Long> {
 
     @NotBlank(message = "{NotBlank.material.titulo}")
-    @Column(nullable = false, length = 255)
+    @Size(min = 2, max = 255)
+    @Column(nullable = false)
     private String titulo;
 
     @NotBlank(message = "{NotBlank.material.descricao}")
@@ -25,6 +33,7 @@ public class Material extends AbstractEntity<Long> {
 
     @NotNull(message = "{NotNull.material.categoria}")
     @Enumerated(EnumType.STRING)
+    @Size(min = 5, max = 15)
     @Column(nullable = false)
     private Categoria categoria;
 
@@ -38,6 +47,7 @@ public class Material extends AbstractEntity<Long> {
 
     @NotNull(message = "{NotNull.material.estadoConservacao}")
     @Enumerated(EnumType.STRING)
+    @Size(min = 2, max = 10)
     @Column(name = "estado_conservacao", nullable = false)
     private EstadoConservacao estadoConservacao;
 
@@ -46,7 +56,8 @@ public class Material extends AbstractEntity<Long> {
     private String fotos;
 
     @NotBlank(message = "{NotBlank.material.localRetirada}")
-    @Column(name = "local_retirada", nullable = false, length = 255)
+    @Size(max = 255)
+    @Column(name = "local_retirada", nullable = false)
     private String localRetirada;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
