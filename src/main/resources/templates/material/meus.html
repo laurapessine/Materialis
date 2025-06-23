@@ -1,0 +1,39 @@
+<!-- src/main/resources/templates/material/meus.html -->
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout('Meus Materiais', ~{::content})">
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:fragment="content">
+        <h2 th:text="#{nav.meusMateriais}">Meus Materiais</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th th:text="#{material.titulo.label}">Título</th>
+                    <th th:text="#{material.categoria.label}">Categoria</th>
+                    <th th:text="#{material.estadoConservacao.label}">Estado</th>
+                    <th th:text="#{material.localRetirada.label}">Local</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mat : ${materiais}">
+                    <td th:text="${mat.titulo}">Título</td>
+                    <td th:text="#{${'material.categoria.' + mat.categoria}}">Categoria</td>
+                    <td th:text="#{${'material.estadoConservacao.' + mat.estadoConservacao}}">Estado</td>
+                    <td th:text="${mat.localRetirada}">Local</td>
+                    <td>
+                        <a th:href="@{|/materiais/editar/${mat.id}|}" th:text="#{button.editar}">Editar</a>
+                        <a th:href="@{|/materiais/excluir/${mat.id}|}" th:text="#{button.excluir}">Excluir</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(materiais)}">
+                    <td colspan="5" th:text="#{material.naoEncontrado}">Nenhum material encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

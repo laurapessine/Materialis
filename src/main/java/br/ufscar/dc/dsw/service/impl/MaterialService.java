@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw.service.impl;
 import br.ufscar.dc.dsw.dao.IMaterialDAO;
 import br.ufscar.dc.dsw.domain.Material;
 import br.ufscar.dc.dsw.domain.Material.Categoria;
+import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.service.spec.IMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,17 +29,30 @@ public class MaterialService implements IMaterialService {
 
     @Override
     public List<Material> buscarPorCategoria(Categoria categoria) {
-        try {
-            Categoria cat = Categoria.valueOf(categoria.toString().toUpperCase());
-            return dao.findByCategoria(cat);
-        } catch (IllegalArgumentException e) {
-            return List.of();
-        }
+        return categoria == null ? buscarTodos() : dao.findByCategoria(categoria);
     }
 
     @Override
     public List<Material> buscarPorPalavraChave(String palavra) {
-        return dao.findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(palavra, palavra);
+        return (palavra == null || palavra.isBlank()) ? buscarTodos()
+                : dao.findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(palavra, palavra);
+    }
+
+    @Override
+    public List<Material> buscarDisponiveis(Categoria categoria, String palavra) {
+        List<Material> lista = buscarTodos();
+        if (categoria != null) {
+            lista = dao.findByCategoria(categoria);
+        }
+        if (palavra != null && !palavra.isBlank()) {
+            lista = dao.findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(palavra, palavra);
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Material> buscarPorDono(Estudante estudante) {
+        return estudante == null ? List.of() : dao.findByEstudante(estudante);
     }
 
     @Override

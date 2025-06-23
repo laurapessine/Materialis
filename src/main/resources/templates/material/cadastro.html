@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout :: layout(
+      th:replace="~{layout :: layout(
          ${material.id} == null ? 'Cadastrar Material' : 'Editar Material',
          ~{::content}
-      )">
+      )}">
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
@@ -18,7 +18,8 @@
             </div>
             <div>
                 <label for="descricao" th:text="#{material.descricao.label}">Descrição</label>
-                <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição do material"></textarea>
+                <textarea id="descricao" th:field="*{descricao}" rows="4"
+                          placeholder="Descrição do material"></textarea>
                 <div class="error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
             </div>
             <div>
@@ -27,7 +28,7 @@
                     <option value="" disabled th:if="${material.categoria == null}" selected>-- Selecione --</option>
                     <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
                             th:value="${cat}"
-                            th:text="#{${'material.categoria.' + cat}}">Categoria</option>
+                            th:text="#{material.categoria.${cat}}">Categoria</option>
                 </select>
                 <div class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
             </div>
@@ -37,14 +38,13 @@
                     <option value="" disabled th:if="${material.estadoConservacao == null}" selected>-- Selecione --</option>
                     <option th:each="ec : ${T(br.ufscar.dc.dsw.domain.Material.EstadoConservacao).values()}"
                             th:value="${ec}"
-                            th:text="#{${'material.estadoConservacao.' + ec}}">Estado</option>
+                            th:text="#{material.estadoConservacao.${ec}}">Estado</option>
                 </select>
                 <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
             </div>
             <div>
-                <label for="fotos" th:text="#{material.fotos.label}">URLs das Fotos (JSON)</label>
+                <label for="fotos" th:text="#{material.fotos.label}">Fotos (JSON)</label>
                 <input type="text" id="fotos" th:field="*{fotos}" placeholder="[&quot;url1&quot;, &quot;url2&quot;]" />
-                <small th:text="#{material.fotos.label} + ' (JSON)'">Informe um array JSON com as URLs.</small>
             </div>
             <div>
                 <label for="localRetirada" th:text="#{material.localRetirada.label}">Local de Retirada</label>

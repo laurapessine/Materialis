@@ -1,26 +1,16 @@
 package br.ufscar.dc.dsw.domain;
 
-import java.time.LocalDateTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Material")
 public class Material extends AbstractEntity<Long> {
 
     @NotBlank(message = "{NotBlank.material.titulo}")
-    @Size(max = 255, message = "{Size.material.titulo}")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String titulo;
 
     @NotBlank(message = "{NotBlank.material.descricao}")
@@ -35,7 +25,6 @@ public class Material extends AbstractEntity<Long> {
 
     @NotNull(message = "{NotNull.material.categoria}")
     @Enumerated(EnumType.STRING)
-    @Size(min = 5, max = 15)
     @Column(nullable = false)
     private Categoria categoria;
 
@@ -49,21 +38,16 @@ public class Material extends AbstractEntity<Long> {
 
     @NotNull(message = "{NotNull.material.estadoConservacao}")
     @Enumerated(EnumType.STRING)
-    @Size(min = 2, max = 10)
     @Column(name = "estado_conservacao", nullable = false)
     private EstadoConservacao estadoConservacao;
 
-    // Para armazenar JSON de URLs de fotos
     @Column(columnDefinition = "JSON")
     private String fotos;
 
     @NotBlank(message = "{NotBlank.material.localRetirada}")
-    @Size(max = 255, message = "{Size.material.localRetirada}")
-    @Column(name = "local_retirada", nullable = false)
+    @Column(name = "local_retirada", nullable = false, length = 255)
     private String localRetirada;
 
-    // Associação com o dono (estudante que cadastrou) - necessária para R9
-    @NotNull(message = "{NotNull.material.dono}")
     @ManyToOne
     @JoinColumn(name = "estudante_id", nullable = false)
     private Estudante estudante;
@@ -85,66 +69,28 @@ public class Material extends AbstractEntity<Long> {
         this.atualizadoEm = LocalDateTime.now();
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    // Getters and setters
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public String getDescricao() {
-        return descricao;
-    }
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    public EstadoConservacao getEstadoConservacao() { return estadoConservacao; }
+    public void setEstadoConservacao(EstadoConservacao estadoConservacao) { this.estadoConservacao = estadoConservacao; }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+    public String getFotos() { return fotos; }
+    public void setFotos(String fotos) { this.fotos = fotos; }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+    public String getLocalRetirada() { return localRetirada; }
+    public void setLocalRetirada(String localRetirada) { this.localRetirada = localRetirada; }
 
-    public EstadoConservacao getEstadoConservacao() {
-        return estadoConservacao;
-    }
+    public Estudante getEstudante() { return estudante; }
+    public void setEstudante(Estudante estudante) { this.estudante = estudante; }
 
-    public void setEstadoConservacao(EstadoConservacao estadoConservacao) {
-        this.estadoConservacao = estadoConservacao;
-    }
-
-    public String getFotos() {
-        return fotos;
-    }
-
-    public void setFotos(String fotos) {
-        this.fotos = fotos;
-    }
-
-    public String getLocalRetirada() {
-        return localRetirada;
-    }
-
-    public void setLocalRetirada(String localRetirada) {
-        this.localRetirada = localRetirada;
-    }
-
-    public Estudante getEstudante() {
-        return estudante;
-    }
-    public void setEstudante(Estudante estudante) {
-        this.estudante = estudante;
-    }
-
-    public LocalDateTime getCriadoEm() {
-        return criadoEm;
-    }
-
-    public LocalDateTime getAtualizadoEm() {
-        return atualizadoEm;
-    }
+    public LocalDateTime getCriadoEm() { return criadoEm; }
+    public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
 }
