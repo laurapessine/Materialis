@@ -10,5 +10,5 @@ import br.ufscar.dc.dsw.domain.Material.Categoria;
 public interface IMaterialDAO extends JpaRepository<Material, Long> {
     List<Material> findByCategoria(Categoria categoria);
     List<Material> findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(String titulo, String descricao);
-    List<Material> findByDono(Estudante dono);
+    List<Material> findByEstudante(Estudante estudante);
 }

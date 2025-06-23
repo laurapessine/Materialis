@@ -66,7 +66,7 @@ public class Material extends AbstractEntity<Long> {
     @NotNull(message = "{NotNull.material.dono}")
     @ManyToOne
     @JoinColumn(name = "estudante_id", nullable = false)
-    private Estudante dono;
+    private Estudante estudante;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
@@ -133,11 +133,11 @@ public class Material extends AbstractEntity<Long> {
         this.localRetirada = localRetirada;
     }
 
-    public Estudante getDono() {
-        return dono;
+    public Estudante getEstudante() {
+        return estudante;
     }
-    public void setDono(Estudante dono) {
-        this.dono = dono;
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
     }
 
     public LocalDateTime getCriadoEm() {
