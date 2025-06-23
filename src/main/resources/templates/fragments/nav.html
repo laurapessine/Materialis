@@ -1,37 +1,13 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<div th:fragment="nav">
-  <nav class="nav-bar">
-    <a th:href="@{/}" class="nav-logo">Materialis</a>
-    <ul class="nav-list">
-      <li><a th:href="@{/materiais/listar}">Explorar</a></li>
-      <li sec:authorize="hasRole('USER')">
-        <a th:href="@{/materiais/meus-materiais}" 
-           th:classappend="${activeTab == 'meusMateriais'} ? 'active'">
-           Meus Materiais
-        </a>
-      </li>
-      <li sec:authorize="hasRole('USER')">
-        <a th:href="@{/emprestimos/meus-emprestimos}" 
-           th:classappend="${activeTab == 'meusEmprestimos'} ? 'active'">
-           Meus Empréstimos
-        </a>
-      </li>
-      <li sec:authorize="hasRole('USER')">
-        <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}"
-           th:classappend="${activeTab == 'gerenciarSolicitacoes'} ? 'active'">
-           Gerenciar Solicitações
-        </a>
-      </li>
-      <li sec:authorize="hasRole('ADMIN')">
-        <a th:href="@{/estudantes/listar}">Gerenciar Estudantes</a>
-      </li>
-      <li sec:authorize="!isAuthenticated()">
-        <a th:href="@{/login}">Login</a>
-      </li>
-      <li sec:authorize="isAuthenticated()">
-        <a th:href="@{/logout}">Logout</a>
-      </li>
+<nav th:fragment="nav" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/materiais/listar}">Materiais</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/cadastrar}">Cadastrar Material</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/meus-materiais}">Meus Materiais</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a></li>
+        <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Solicitações Recebidas</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/estudantes/listar}">Estudantes</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+        <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
     </ul>
-  </nav>
-</div>
+</nav>
