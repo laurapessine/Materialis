@@ -1,19 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-    <h1>Login</h1>
-    <form th:action="@{/login}" method="post">
-        <label for="username">Usuário:</label>
-        <input type="text" id="username" name="username">
-        <br>
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password">
-        <br>
-        <button type="submit">Entrar</button>
-    </form>
+  <h1>Login</h1>
+  <form th:action="@{/login}" method="post">
+    <div>
+      <label for="username">E-mail:</label>
+      <input type="text" id="username" name="username"
+             th:classappend="${param.error}? 'is-invalid'">
+    </div>
+    <div>
+      <label for="password">Senha:</label>
+      <input type="password" id="password" name="password"
+             th:classappend="${param.error}? 'is-invalid'">
+    </div>
+    <div>
+      <button type="submit">Entrar</button>
+    </div>
+    <div th:if="${param.error}">
+      <p style="color:red;">Credenciais inválidas.</p>
+    </div>
+    <div th:if="${param.logout}">
+      <p style="color:green;">Desconectado com sucesso.</p>
+    </div>
+  </form>
 </body>
 </html>
