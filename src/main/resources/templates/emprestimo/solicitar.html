@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8" />
 </head>
@@ -8,18 +8,18 @@
         <nav class="navbar navbar-expand-md bg-light">
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active"><i class="oi oi-caret-right"></i>
+                    <li class="nav-item active">
                         <span>Solicitar Empréstimo</span></li>
                 </ul>
                 <a class="btn btn-primary btn-md" th:href="@{/materiais/listar}"
-                    role="button"> <span class="oi oi-spreadsheet" title="Listar"
-                    aria-hidden="true"></span> <span>Voltar aos Materiais</span>
+                    role="button"> 
+                    <span class="oi oi-spreadsheet" title="Listar"aria-hidden="true"></span> 
+                    <span>Voltar aos Materiais</span>
                 </a>
             </div>
         </nav>
 
         <div class="container" id="cadastro">
-            <div th:replace="fragments/alert"></div>
 
             <form th:action="@{/emprestimos/salvarSolicitacao}" th:object="${emprestimo}" method="POST">
 
@@ -60,5 +60,8 @@
             </form>
         </div>
     </section>
+    <footer>
+		&copy; 2025 - Sistema de Gerenciamento de Estudantes
+	</footer>
 </body>
 </html>

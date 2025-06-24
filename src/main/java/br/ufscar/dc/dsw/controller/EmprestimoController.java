@@ -52,7 +52,7 @@ public class EmprestimoController {
             return null;
         }
         String userEmail = authentication.getName();
-        return estudanteService.buscarPorEmail(userEmail);  // buscar pelo email real do usuário
+        return estudanteService.buscarPorEmail(userEmail);
     }
 
 
