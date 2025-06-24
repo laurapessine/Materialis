@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher; // Remove this import
-// import org.springframework.web.servlet.handler.HandlerMappingIntrospector; // Remove this import
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,9 +19,6 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Direct use of requestMatchers with path strings is now the preferred way.
-        // Spring Security's PathPatternParser (default since Spring Boot 2.6 / Spring Security 5.6)
-        // handles most common matching scenarios efficiently.
         http
             .authorizeHttpRequests((requests) -> requests
                 // Permit static resources without authentication

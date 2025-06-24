@@ -3,121 +3,116 @@
 <head>
 <meta charset="UTF-8" />
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        color: #333;
-        line-height: 1.6;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #0056b3;
-        color: #fff;
-        padding: 1rem 2rem;
-    }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0056b3;
+            color: #fff;
+            padding: 1rem 2rem;
+        }
 
-    nav ul {
-        list-style: none;
-        display: flex;
-        gap: 1rem;
-    }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+        }
 
-    nav ul li {
-        font-weight: bold;
-    }
+        nav ul li {
+            font-weight: bold;
+        }
 
-    nav span {
-        color: #fff;
-        font-weight: bold;
-    }
+        nav span {
+            color: #fff;
+            font-weight: bold;
+        }
 
-    .container {
-        max-width: 960px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
+        .table-responsive {
+            overflow-x: auto;
+        }
 
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1rem 0;
-    }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
 
-    .table th,
-    .table td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
 
-    .table th {
-        background: #0056b3;
-        color: #fff;
-    }
+        .table th {
+            background: #0056b3;
+            color: #fff;
+        }
 
-    .table tr:nth-child(even) {
-        background: #f9f9f9;
-    }
+        .table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
 
-    .btn {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        font-weight: bold;
-        text-align: center;
-        text-decoration: none;
-        color: #fff;
-    }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+        }
 
-    .btn-success {
-        background: #28a745;
-    }
+        .btn-edit {
+            background: #007bff;
+        }
 
-    .btn-success:hover {
-        background: #218838;
-    }
+        .btn-edit:hover {
+            background: #0056b3;
+        }
 
-    .btn-info {
-        background: #17a2b8;
-    }
+        .btn-delete {
+            background: #dc3545;
+        }
 
-    .btn-info:hover {
-        background: #138496;
-    }
+        .btn-delete:hover {
+            background: #b02a37;
+        }
 
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
-    }
-
-    footer {
-		bottom: 0;
-		position: fixed;
-		text-align: center;
-		width: 100%;
-		padding: 1rem;
-		background: #0056b3;
-		color: #fff;
-		margin-top: 2rem;
-	}
-</style>
+        footer {
+            bottom: 0;
+            position: fixed;
+            text-align: center;
+            width: 100%;
+            padding: 1rem;
+            background: #0056b3;
+            color: #fff;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
     <section class="layout-content" layout:fragment="corpo">

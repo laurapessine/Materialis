@@ -44,6 +44,6 @@ public class EstudanteService implements IEstudanteService {
 
     @Override
     public Estudante buscarPorEmail(String email) {
-        throw new UnsupportedOperationException("Unimplemented method 'buscarPorEmail'");
+        return dao.findByEmail(email);
     }
 }
