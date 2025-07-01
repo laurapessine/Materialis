@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Material")
 public class Material extends AbstractEntity<Long> {
-
     @NotBlank(message = "{NotBlank.material.titulo}")
     @Column(nullable = false, length = 255)
     private String titulo;
@@ -69,28 +68,67 @@ public class Material extends AbstractEntity<Long> {
         this.atualizadoEm = LocalDateTime.now();
     }
 
-    // Getters and setters
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getTitulo() {
+        return titulo;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-    public Categoria getCategoria() { return categoria; }
-    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public EstadoConservacao getEstadoConservacao() { return estadoConservacao; }
-    public void setEstadoConservacao(EstadoConservacao estadoConservacao) { this.estadoConservacao = estadoConservacao; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-    public String getFotos() { return fotos; }
-    public void setFotos(String fotos) { this.fotos = fotos; }
+    public Categoria getCategoria() {
+        return categoria;
+    }
 
-    public String getLocalRetirada() { return localRetirada; }
-    public void setLocalRetirada(String localRetirada) { this.localRetirada = localRetirada; }
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
-    public Estudante getEstudante() { return estudante; }
-    public void setEstudante(Estudante estudante) { this.estudante = estudante; }
+    public EstadoConservacao getEstadoConservacao() {
+        return estadoConservacao;
+    }
 
-    public LocalDateTime getCriadoEm() { return criadoEm; }
-    public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
+    public void setEstadoConservacao(EstadoConservacao estadoConservacao) {
+        this.estadoConservacao = estadoConservacao;
+    }
+
+    public String getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(String fotos) {
+        this.fotos = fotos;
+    }
+
+    public String getLocalRetirada() {
+        return localRetirada;
+    }
+
+    public void setLocalRetirada(String localRetirada) {
+        this.localRetirada = localRetirada;
+    }
+
+    public Estudante getEstudante() {
+        return estudante;
+    }
+
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
+    }
+
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public LocalDateTime getAtualizadoEm() {
+        return atualizadoEm;
+    }
 }
