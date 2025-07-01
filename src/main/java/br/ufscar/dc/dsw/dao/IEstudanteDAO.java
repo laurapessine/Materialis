@@ -1,11 +1,11 @@
 package br.ufscar.dc.dsw.dao;
 
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import br.ufscar.dc.dsw.domain.Estudante;
 
 @SuppressWarnings("unchecked")
-public interface IEstudanteDAO extends JpaRepository<Estudante, Long> {
+public interface IEstudanteDAO extends CrudRepository<Estudante, Long> {
     Estudante findById(long id);
     Estudante findByCpf(String CPF);
     Estudante findByEmail(String email);
