@@ -47,11 +47,7 @@ public class MaterialController {
     }
 
     @GetMapping("/listar")
-    public String listar(
-            @RequestParam(value = "categoria", required = false) Categoria categoria,
-            @RequestParam(value = "palavra", required = false) String palavra,
-            ModelMap model) {
-
+    public String listar(@RequestParam(value = "categoria", required = false) Categoria categoria, @RequestParam(value = "palavra", required = false) String palavra, ModelMap model) {
         List<Material> materiais;
         if (categoria != null) {
             materiais = materialService.buscarDisponiveis(categoria, palavra);
@@ -70,28 +66,22 @@ public class MaterialController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Material material, BindingResult result,
-                         RedirectAttributes attr, Principal principal) {
+    public String salvar(@Valid Material material, BindingResult result, RedirectAttributes attr, Principal principal) {
         if (result.hasErrors()) {
             return "material/cadastro";
         }
-        // associa o dono logado
         String email = principal.getName();
         Estudante dono = estudanteService.buscarPorEmail(email);
         material.setEstudante(dono);
-
         try {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.salvar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
         } catch (Exception e) {
-            // exemplo: BusinessException com código em e.getMessage()
             String code = e.getMessage();
             if ("material.titulo.duplicado".equals(code)) {
-                result.rejectValue("titulo", "error.material.titulo.duplicado",
-                        messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
+                result.rejectValue("titulo", "error.material.titulo.duplicado", messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
             } else {
-                // mensagem genérica
                 result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault())
 );
             }
@@ -107,7 +97,6 @@ public class MaterialController {
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
             return "redirect:/materiais/listar";
         }
-        // verifica se o dono é o usuário logado
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         if (!material.getEstudante().getId().equals(dono.getId())) {
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.autorizado", null, LocaleContextHolder.getLocale()));
@@ -118,15 +107,12 @@ public class MaterialController {
     }
 
     @PostMapping("/editar")
-    public String editar(@Valid Material material, BindingResult result,
-                         RedirectAttributes attr, Principal principal) {
+    public String editar(@Valid Material material, BindingResult result, RedirectAttributes attr, Principal principal) {
         if (result.hasErrors()) {
             return "material/cadastro";
         }
-        // garante dono
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         material.setEstudante(dono);
-
         try {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
@@ -144,7 +130,7 @@ public class MaterialController {
         }
         return "redirect:/materiais/listar";
     }
-
+    
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable Long id, ModelMap model, Principal principal, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(id);
