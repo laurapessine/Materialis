@@ -14,6 +14,10 @@ import br.ufscar.dc.dsw.domain.Material;
 import br.ufscar.dc.dsw.domain.Material.Categoria;
 import br.ufscar.dc.dsw.domain.Material.EstadoConservacao;
 import br.ufscar.dc.dsw.service.spec.IMaterialService;
+import jakarta.validation.constraints.Null;
+import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
+import br.ufscar.dc.dsw.domain.Emprestimo;
+import br.ufscar.dc.dsw.domain.Emprestimo.Status;
 
 @SpringBootApplication
 public class MaterialisApplication {
@@ -26,6 +30,7 @@ public class MaterialisApplication {
     public CommandLineRunner demo(
             IEstudanteDAO estudanteDAO,
             IMaterialService materialService,
+            IEmprestimoService emprestimoService,
             PasswordEncoder passwordEncoder) {
         return (args) -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -116,6 +121,26 @@ public class MaterialisApplication {
                     materialService.salvar(m5);
                 }
             }
+            Material material = materialService.buscarPorId((long) 5);
+
+        if (lorena != null && material != null){
+            // Verificar se já existe uma solicitação para evitar duplicatas
+            boolean existeSolicitacao = emprestimoService
+                    .buscarPorEstudante(lorena)
+                    .stream()
+                    .anyMatch(e -> e.getMaterial().getId().equals(material.getId()));
+
+            if (!existeSolicitacao) {
+                Emprestimo emprestimo = new Emprestimo();
+                emprestimo.setEstudante(lorena);
+                emprestimo.setMaterial(material);
+                emprestimo.setDataSolicitacao(LocalDate.now());
+                emprestimo.setDataDevolucaoPrevista(LocalDate.now().plusDays(7));
+                emprestimo.setJustificativa("Uso acadêmico para anotações.");
+                emprestimo.setStatus(Status.ABERTO); // Ajuste conforme o status inicial
+                emprestimoService.salvar(emprestimo);
+            }
+        }
         };
     }
 }

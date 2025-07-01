@@ -2,136 +2,136 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8" />
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-		body {
-			font-family: Arial, sans-serif;
-			background: #f4f4f4;
-			color: #333;
-			line-height: 1.6;
-		}
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+    }
 
-		nav {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background: #0056b3;
-			color: #fff;
-			padding: 1rem 2rem;
-		}
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #0056b3;
+        color: #fff;
+        padding: 1rem 2rem;
+    }
 
-		nav ul {
-			list-style: none;
-			display: flex;
-			gap: 1rem;
-		}
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+    }
 
-		nav ul li {
-			display: inline;
-			font-weight: bold;
-		}
+    nav ul li {
+        display: inline;
+        font-weight: bold;
+    }
 
-		nav a {
-			color: #fff;
-			text-decoration: none;
-			font-weight: bold;
-			padding: 0.5rem 1rem;
-			border-radius: 0.25rem;
-		}
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
 
-		nav a:hover {
-			background: #004494;
-		}
+    nav a:hover {
+        background: #004494;
+    }
 
-		.container {
-			max-width: 960px;
-			margin: 2rem auto;
-			padding: 2rem;
-			background: #fff;
-			border-radius: 8px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
+    .container {
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-		form {
-			display: flex;
-			flex-direction: column;
-			gap: 1.5rem;
-		}
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
 
-		label {
-			font-weight: bold;
-			margin-bottom: 0.5rem;
-		}
+    label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
 
-		.form-control {
-			width: 100%;
-			padding: 0.5rem;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-			font-size: 1rem;
-		}
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
 
-		.form-control:focus {
-			border-color: #0056b3;
-			box-shadow: 0 0 4px rgba(0, 86, 179, 0.5);
-			outline: none;
-		}
+    .form-control:focus {
+        border-color: #0056b3;
+        box-shadow: 0 0 4px rgba(0, 86, 179, 0.5);
+        outline: none;
+    }
 
-		.form-group {
-			display: flex;
-			flex-direction: column;
-		}
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-		.form-row {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-			gap: 1rem;
-		}
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
 
-		.btn {
-			display: inline-block;
-			padding: 0.5rem 1rem;
-			border-radius: 4px;
-			font-size: 1rem;
-			font-weight: bold;
-			text-align: center;
-			color: #fff;
-			background: #0056b3;
-			border: none;
-			cursor: pointer;
-		}
+    .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        background: #0056b3;
+        border: none;
+        cursor: pointer;
+    }
 
-		.btn:hover {
-			background: #004494;
-		}
+    .btn:hover {
+        background: #004494;
+    }
 
-		.btn-primary {
-			background: #0056b3;
-		}
+    .btn-primary {
+        background: #0056b3;
+    }
 
-		.btn-primary:hover {
-			background: #004494;
-		}
+    .btn-primary:hover {
+        background: #004494;
+    }
 
-		.invalid-feedback {
-			color: #dc3545;
-			font-size: 0.875rem;
-			margin-top: 0.5rem;
-		}
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
 
-		footer {
-			text-align: center;
-			padding: 1rem;
-			background: #0056b3;
-			color: #fff;
-			margin-top: 2rem;
-		}
-	</style>
+    footer {
+        text-align: center;
+        padding: 1rem;
+        background: #0056b3;
+        color: #fff;
+        margin-top: 2rem;
+    }
+</style>
 </head>
 <body>
 	<section class="layout-content" layout:fragment="corpo">
@@ -149,7 +149,7 @@
 		</nav>
 
 		<div class="container" id="cadastro">
-
+			<input type="hidden" th:if="*{id} != null" th:field="*{id}" />
 			<form
 				th:action="${estudante.id == null} ? @{/estudantes/salvar} : @{/estudantes/editar}"
 				th:object="${estudante}" method="POST">
@@ -244,6 +244,7 @@
 							th:field="*{nascimento}"
 							th:classappend="${#fields.hasErrors('nascimento')} ? is-invalid" />
 						<div class="invalid-feedback">
+							
 							<span th:errors="*{nascimento}"></span>
 						</div>
 					</div>

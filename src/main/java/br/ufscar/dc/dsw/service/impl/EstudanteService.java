@@ -9,25 +9,22 @@ import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = false)
 public class EstudanteService implements IEstudanteService {
-
     @Autowired
-    private IEstudanteDAO dao;
-
+	IEstudanteDAO dao;
+	
+	public void salvar(Estudante estudante) {
+		dao.save(estudante);
+	}
+	
+	public void excluir(Long id) {
+		dao.deleteById(id);
+	}
+	
     @Override
     public Estudante buscarPorId(Long id) {
         return dao.findById(id).orElse(null);
-    }
-
-    @Override
-    public Estudante buscarPorCPF(String cpf) {
-        return dao.findByCpf(cpf);
-    }
-
-    @Override
-    public Estudante buscarPorEmail(String email) {
-        return dao.findByEmail(email);
     }
 
     @Override
@@ -36,21 +33,17 @@ public class EstudanteService implements IEstudanteService {
     }
 
     @Override
-    public void salvar(Estudante estudante) {
-        dao.save(estudante);
+    public Estudante buscarPorCPF(String cpf){
+        return dao.findByCpf(cpf);
     }
 
-    @Override
-    public void excluir(Long id) {
-        dao.deleteById(id);
-    }
+    @Transactional(readOnly = true)
+	public boolean estudanteTemMaterial(Long id) {
+		return !dao.findById(id.longValue()).getMateriais().isEmpty(); 
+	}
 
     @Override
-    public boolean estudanteTemMaterial(Long id) {
-        // implementar: verifica se há materiais vinculados a este estudante.
-        // p.ex:
-        // return materialDAO.existsByEstudanteId(id);
-        // ou trazer lista e checar size>0.
-        return false; // ajuste conforme lógica
+    public Estudante buscarPorEmail(String email) {
+        return dao.findByEmail(email);
     }
 }
