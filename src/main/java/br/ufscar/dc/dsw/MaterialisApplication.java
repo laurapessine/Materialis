@@ -9,29 +9,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import br.ufscar.dc.dsw.dao.IEstudanteDAO;
+import br.ufscar.dc.dsw.domain.Emprestimo;
+import br.ufscar.dc.dsw.domain.Emprestimo.Status;
 import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
 import br.ufscar.dc.dsw.domain.Material.Categoria;
 import br.ufscar.dc.dsw.domain.Material.EstadoConservacao;
-import br.ufscar.dc.dsw.service.spec.IMaterialService;
-import jakarta.validation.constraints.Null;
 import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
-import br.ufscar.dc.dsw.domain.Emprestimo;
-import br.ufscar.dc.dsw.domain.Emprestimo.Status;
+import br.ufscar.dc.dsw.service.spec.IMaterialService;
 
 @SpringBootApplication
 public class MaterialisApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(MaterialisApplication.class, args);
     }
 
     @Bean
-    public CommandLineRunner demo(
-            IEstudanteDAO estudanteDAO,
-            IMaterialService materialService,
-            IEmprestimoService emprestimoService,
-            PasswordEncoder passwordEncoder) {
+    public CommandLineRunner demo(IEstudanteDAO estudanteDAO, IMaterialService materialService,
+            IEmprestimoService emprestimoService, PasswordEncoder passwordEncoder) {
         return (args) -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             if (!estudanteDAO.existsByCpf("12314192823")) {
@@ -65,7 +60,8 @@ public class MaterialisApplication {
                 if (materiaisLorena.stream().noneMatch(m -> m.getTitulo().equals("Kit de Papelaria Completo"))) {
                     Material m1 = new Material();
                     m1.setTitulo("Kit de Papelaria Completo");
-                    m1.setDescricao("Estojo contendo canetas coloridas, lápis, borracha, régua e apontador. Ideal para anotações em aula.");
+                    m1.setDescricao(
+                            "Estojo contendo canetas coloridas, lápis, borracha, régua e apontador. Ideal para anotações em aula.");
                     m1.setCategoria(Categoria.PAPELARIA);
                     m1.setEstadoConservacao(EstadoConservacao.NOVO);
                     m1.setFotos(null);
@@ -73,10 +69,12 @@ public class MaterialisApplication {
                     m1.setEstudante(lorena);
                     materialService.salvar(m1);
                 }
-                if (materiaisLorena.stream().noneMatch(m -> m.getTitulo().equals("Livro: Estruturas de Dados em Java"))) {
+                if (materiaisLorena.stream()
+                        .noneMatch(m -> m.getTitulo().equals("Livro: Estruturas de Dados em Java"))) {
                     Material m2 = new Material();
                     m2.setTitulo("Livro: Estruturas de Dados em Java");
-                    m2.setDescricao("Livro texto usado, 2ª edição. Cobre listas, pilhas, filas, árvores e grafos com exemplos em Java.");
+                    m2.setDescricao(
+                            "Livro texto usado, 2ª edição. Cobre listas, pilhas, filas, árvores e grafos com exemplos em Java.");
                     m2.setCategoria(Categoria.LIVROS);
                     m2.setEstadoConservacao(EstadoConservacao.REGULAR);
                     m2.setFotos(null);
@@ -87,7 +85,8 @@ public class MaterialisApplication {
                 if (materiaisLorena.stream().noneMatch(m -> m.getTitulo().equals("Calculadora Científica HP 50g"))) {
                     Material m3 = new Material();
                     m3.setTitulo("Calculadora Científica HP 50g");
-                    m3.setDescricao("Calculadora científica avançada, com funções de álgebra computacional. Bateria em bom estado.");
+                    m3.setDescricao(
+                            "Calculadora científica avançada, com funções de álgebra computacional. Bateria em bom estado.");
                     m3.setCategoria(Categoria.ELETRONICOS);
                     m3.setEstadoConservacao(EstadoConservacao.EXCELENTE);
                     m3.setFotos(null);
@@ -101,7 +100,8 @@ public class MaterialisApplication {
                 if (materiaisLuis.stream().noneMatch(m -> m.getTitulo().equals("Kit Arduino Uno com Protoboard"))) {
                     Material m4 = new Material();
                     m4.setTitulo("Kit Arduino Uno com Protoboard");
-                    m4.setDescricao("Inclui placa Arduino Uno, cabos, sensores básicos e protoboard. Perfeito para projetos de eletrônica.");
+                    m4.setDescricao(
+                            "Inclui placa Arduino Uno, cabos, sensores básicos e protoboard. Perfeito para projetos de eletrônica.");
                     m4.setCategoria(Categoria.ELETRONICOS);
                     m4.setEstadoConservacao(EstadoConservacao.RUIM);
                     m4.setFotos(null);
@@ -122,25 +122,22 @@ public class MaterialisApplication {
                 }
             }
             Material material = materialService.buscarPorId((long) 5);
-
-        if (lorena != null && material != null){
-            // Verificar se já existe uma solicitação para evitar duplicatas
-            boolean existeSolicitacao = emprestimoService
-                    .buscarPorEstudante(lorena)
-                    .stream()
-                    .anyMatch(e -> e.getMaterial().getId().equals(material.getId()));
-
-            if (!existeSolicitacao) {
-                Emprestimo emprestimo = new Emprestimo();
-                emprestimo.setEstudante(lorena);
-                emprestimo.setMaterial(material);
-                emprestimo.setDataSolicitacao(LocalDate.now());
-                emprestimo.setDataDevolucaoPrevista(LocalDate.now().plusDays(7));
-                emprestimo.setJustificativa("Uso acadêmico para anotações.");
-                emprestimo.setStatus(Status.ABERTO); // Ajuste conforme o status inicial
-                emprestimoService.salvar(emprestimo);
+            if (lorena != null && material != null) {
+                boolean existeSolicitacao = emprestimoService
+                        .buscarPorEstudante(lorena)
+                        .stream()
+                        .anyMatch(e -> e.getMaterial().getId().equals(material.getId()));
+                if (!existeSolicitacao) {
+                    Emprestimo emprestimo = new Emprestimo();
+                    emprestimo.setEstudante(lorena);
+                    emprestimo.setMaterial(material);
+                    emprestimo.setDataSolicitacao(LocalDate.now());
+                    emprestimo.setDataDevolucaoPrevista(LocalDate.now().plusDays(7));
+                    emprestimo.setJustificativa("Uso acadêmico para anotações.");
+                    emprestimo.setStatus(Status.ABERTO);
+                    emprestimoService.salvar(emprestimo);
+                }
             }
-        }
         };
     }
 }
