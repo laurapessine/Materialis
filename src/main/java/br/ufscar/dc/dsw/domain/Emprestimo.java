@@ -16,7 +16,6 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "Emprestimo")
 public class Emprestimo extends AbstractEntity<Long> {
-
     @NotNull(message = "{NotNull.emprestimo.estudante}")
     @ManyToOne
     @JoinColumn(name = "estudante_id", nullable = false)
@@ -44,11 +43,11 @@ public class Emprestimo extends AbstractEntity<Long> {
     private String justificativa;
 
     public enum Status {
-        ABERTO,       
-        APROVADO,     
-        RECUSADO,     
-        EM_ANDAMENTO, 
-        CONCLUIDO     
+        ABERTO,
+        APROVADO,
+        RECUSADO,
+        EM_ANDAMENTO,
+        CONCLUIDO
     }
 
     @NotNull(message = "{NotNull.emprestimo.status}")

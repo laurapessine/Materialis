@@ -2,9 +2,7 @@ package br.ufscar.dc.dsw.domain;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,10 +19,8 @@ import jakarta.validation.constraints.Size;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Estudante")
-
-public class Estudante extends AbstractEntity<Long>{
-
-    @NotBlank(message = "{NotBlank.estudante.nome}")
+public class Estudante extends AbstractEntity<Long> {
+	@NotBlank(message = "{NotBlank.estudante.nome}")
 	@Size(max = 256, message = "{Size.estudante.nome}")
 	@Column(nullable = false, length = 256)
 	private String nome;
@@ -36,37 +32,37 @@ public class Estudante extends AbstractEntity<Long>{
 	private String email;
 
 	@NotBlank(message = "{NotBlank.estudante.senha}")
-    @Size(min = 6, max = 60, message = "{Size.estudante.senha}")
+	@Size(min = 6, max = 60, message = "{Size.estudante.senha}")
 	@Column(nullable = false, length = 60)
 	private String senha;
 
 	@NotBlank(message = "{NotBlank.estudante.cpf}")
-    @Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.cpf}")
+	@Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.cpf}")
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
 
-    @NotBlank(message = "{NotBlank.estudante.ra}")
-    @Pattern(regexp = "\\d{6}", message = "{Pattern.estudante.ra}")
+	@NotBlank(message = "{NotBlank.estudante.ra}")
+	@Pattern(regexp = "\\d{6}", message = "{Pattern.estudante.ra}")
 	@Column(nullable = false, unique = true, length = 6)
 	private String ra;
 
-    @NotBlank(message = "{NotBlank.estudante.telefone}")
-    @Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.telefone}")
+	@NotBlank(message = "{NotBlank.estudante.telefone}")
+	@Pattern(regexp = "\\d{11}", message = "{Pattern.estudante.telefone}")
 	@Column(nullable = false, unique = true, length = 11)
 	private String telefone;
 
-    public enum Sexo {
-        Feminino,
-        Masculino,
-        Outro
-    }
+	public enum Sexo {
+		Feminino,
+		Masculino,
+		Outro
+	}
 
-    @NotNull(message = "{NotNull.estudante.sexo}")
-    @Enumerated(EnumType.STRING)
+	@NotNull(message = "{NotNull.estudante.sexo}")
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
 	private Sexo sexo;
-
-    @NotNull(message = "{NotNull.estudante.nascimento}")
+	
+	@NotNull(message = "{NotNull.estudante.nascimento}")
 	@Past(message = "{Past.estudante.nascimento}")
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -75,8 +71,8 @@ public class Estudante extends AbstractEntity<Long>{
 	@OneToMany(mappedBy = "estudante")
 	private List<Material> materiais;
 
-    @OneToMany(mappedBy = "estudante")
-    private List<Emprestimo> emprestimosSolicitados;
+	@OneToMany(mappedBy = "estudante")
+	private List<Emprestimo> emprestimosSolicitados;
 
 	public String getNome() {
 		return nome;
@@ -102,7 +98,7 @@ public class Estudante extends AbstractEntity<Long>{
 		this.senha = senha;
 	}
 
-    public String getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 
@@ -110,7 +106,7 @@ public class Estudante extends AbstractEntity<Long>{
 		this.cpf = cpf;
 	}
 
-    public String getRa() {
+	public String getRa() {
 		return ra;
 	}
 
@@ -118,7 +114,7 @@ public class Estudante extends AbstractEntity<Long>{
 		this.ra = ra;
 	}
 
-    public String getTelefone() {
+	public String getTelefone() {
 		return telefone;
 	}
 
@@ -126,7 +122,7 @@ public class Estudante extends AbstractEntity<Long>{
 		this.telefone = telefone;
 	}
 
-    public Sexo getSexo() {
+	public Sexo getSexo() {
 		return sexo;
 	}
 
@@ -134,7 +130,7 @@ public class Estudante extends AbstractEntity<Long>{
 		this.sexo = sexo;
 	}
 
-    public LocalDate getNascimento() {
+	public LocalDate getNascimento() {
 		return nascimento;
 	}
 
@@ -150,11 +146,11 @@ public class Estudante extends AbstractEntity<Long>{
 		this.materiais = materiais;
 	}
 
-    public List<Emprestimo> getEmprestimosSolicitados() {
-        return emprestimosSolicitados;
-    }
+	public List<Emprestimo> getEmprestimosSolicitados() {
+		return emprestimosSolicitados;
+	}
 
-    public void setEmprestimosSolicitados(List<Emprestimo> emprestimosSolicitados) {
-        this.emprestimosSolicitados = emprestimosSolicitados;
-    }
+	public void setEmprestimosSolicitados(List<Emprestimo> emprestimosSolicitados) {
+		this.emprestimosSolicitados = emprestimosSolicitados;
+	}
 }
