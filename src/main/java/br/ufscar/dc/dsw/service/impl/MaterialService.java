@@ -1,19 +1,18 @@
 package br.ufscar.dc.dsw.service.impl;
 
-import br.ufscar.dc.dsw.dao.IMaterialDAO;
-import br.ufscar.dc.dsw.domain.Material;
-import br.ufscar.dc.dsw.domain.Material.Categoria;
-import br.ufscar.dc.dsw.domain.Estudante;
-import br.ufscar.dc.dsw.service.spec.IMaterialService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+import br.ufscar.dc.dsw.dao.IMaterialDAO;
+import br.ufscar.dc.dsw.domain.Estudante;
+import br.ufscar.dc.dsw.domain.Material;
+import br.ufscar.dc.dsw.domain.Material.Categoria;
+import br.ufscar.dc.dsw.service.spec.IMaterialService;
 
 @Service
 @Transactional
 public class MaterialService implements IMaterialService {
-
     @Autowired
     private IMaterialDAO dao;
 

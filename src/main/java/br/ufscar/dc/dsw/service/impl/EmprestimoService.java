@@ -5,20 +5,17 @@ import br.ufscar.dc.dsw.domain.Emprestimo;
 import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
 import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
-import br.ufscar.dc.dsw.service.spec.IEmailService; // Import EmailService
+import br.ufscar.dc.dsw.service.spec.IEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
-// import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class EmprestimoService implements IEmprestimoService {
-
     @Autowired
     private IEmprestimoDAO dao;
 
@@ -70,9 +67,9 @@ public class EmprestimoService implements IEmprestimoService {
             emprestimo.setStatus(Emprestimo.Status.APROVADO);
             dao.save(emprestimo);
             String subject = "Sua solicitação de empréstimo foi APROVADA!";
-            String text = String.format("Olá %s,\n\nSua solicitação de empréstimo para o material '%s' foi aprovada. " +
-                                        "Entre em contato com o doador para combinar a retirada.\n\nAtenciosamente,\nEquipe Materialis",
-                                        emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
+            String text = String.format("Olá %s,\n\nSua solicitação de empréstimo para o material '%s' foi aprovada. "
+                    + "Entre em contato com o doador para combinar a retirada.\n\nAtenciosamente,\nEquipe Materialis",
+                    emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
             emailService.sendEmail(emprestimo.getEstudante().getEmail(), subject, text);
         }
     }
@@ -86,7 +83,7 @@ public class EmprestimoService implements IEmprestimoService {
             dao.save(emprestimo);
             String subject = "Sua solicitação de empréstimo foi RECUSADA.";
             String text = String.format("Olá %s,\n\nSua solicitação de empréstimo para o material '%s' foi recusada.",
-                                        emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
+                    emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
             if (justificativa != null && !justificativa.isBlank()) {
                 text += "\nJustificativa do doador: " + justificativa;
             }
@@ -103,9 +100,13 @@ public class EmprestimoService implements IEmprestimoService {
             if (emprestimo.getStatus() == Emprestimo.Status.APROVADO) {
                 emprestimo.setStatus(Emprestimo.Status.EM_ANDAMENTO);
                 dao.save(emprestimo);
-                String subject = "Seu empréstimo para o material '" + emprestimo.getMaterial().getTitulo() + "' está EM ANDAMENTO!";
-                String text = String.format("Olá %s,\n\nSeu empréstimo para o material '%s' agora está em andamento. Lembre-se da data de devolução prevista: %s.\n\nAtenciosamente,\nEquipe Materialis",
-                                            emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo(), emprestimo.getDataDevolucaoPrevista().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                String subject = "Seu empréstimo para o material '" + emprestimo.getMaterial().getTitulo()
+                        + "' está EM ANDAMENTO!";
+                String text = String.format(
+                        "Olá %s,\n\nSeu empréstimo para o material '%s' agora está em andamento. Lembre-se da data de devolução prevista: %s.\n\nAtenciosamente,\nEquipe Materialis",
+                        emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo(),
+                        emprestimo.getDataDevolucaoPrevista()
+                                .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 emailService.sendEmail(emprestimo.getEstudante().getEmail(), subject, text);
             }
         }
@@ -120,9 +121,11 @@ public class EmprestimoService implements IEmprestimoService {
                 emprestimo.setStatus(Emprestimo.Status.CONCLUIDO);
                 emprestimo.setDataDevolucaoReal(LocalDate.now());
                 dao.save(emprestimo);
-                String subject = "Seu empréstimo para o material '" + emprestimo.getMaterial().getTitulo() + "' foi CONCLUÍDO!";
-                String text = String.format("Olá %s,\n\nSeu empréstimo para o material '%s' foi marcado como concluído. Agradecemos por usar o Materialis!\n\nAtenciosamente,\nEquipe Materialis",
-                                            emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
+                String subject = "Seu empréstimo para o material '" + emprestimo.getMaterial().getTitulo()
+                        + "' foi CONCLUÍDO!";
+                String text = String.format(
+                        "Olá %s,\n\nSeu empréstimo para o material '%s' foi marcado como concluído. Agradecemos por usar o Materialis!\n\nAtenciosamente,\nEquipe Materialis",
+                        emprestimo.getEstudante().getNome(), emprestimo.getMaterial().getTitulo());
                 emailService.sendEmail(emprestimo.getEstudante().getEmail(), subject, text);
             }
         }
