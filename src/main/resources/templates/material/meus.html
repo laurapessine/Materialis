@@ -1,22 +1,20 @@
-<!-- src/main/resources/templates/material/meus.html -->
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-BR">
 <head>
-    <!-- <link rel="stylesheet" th:href="@{/css/style.css}" /> -->
+    <meta charset="UTF-8">
+    <title th:text="#{nav.meusMateriais}">Meus Materiais</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             color: #333;
             line-height: 1.6;
         }
-
         nav {
             display: flex;
             justify-content: space-between;
@@ -25,128 +23,95 @@
             color: #fff;
             padding: 1rem 2rem;
         }
-
         .container {
-            max-width: 960px;
+            max-width: 1280px; /* Largura aumentada para caber todas as colunas */
             margin: 2rem auto;
-            padding: 2rem;
+            padding: 1rem;
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
-        h2 {
-            color: #0056b3;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        table {
+        .table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
         }
-
-        table thead th,
-        table tbody td {
+        .table th, .table td {
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            vertical-align: middle;
         }
-
-        table thead th {
+        .table th {
             background: #0056b3;
             color: #fff;
-            font-weight: bold;
         }
-
-        table tbody tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-
         .btn {
             display: inline-block;
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: bold;
-            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
             text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn-edit {
-            background-color: #007bff;
-        }
-        .btn-edit:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-        }
-        .btn-delete:hover {
-            background-color: #b02a37;
-        }
-
-        .table-actions a {
-            margin-right: 0.5rem;
-        }
-
-        tr td[colspan="5"] {
+            font-size: 0.875rem;
             text-align: center;
-            color: #555;
-            padding: 1.5rem 0;
-        }
-
-        footer {
-            background: #0056b3;
             color: #fff;
-            text-align: center;
-            padding: 1rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            border: none;
+            cursor: pointer;
         }
+        .btn-info { background: #17a2b8; }
+        .btn-danger { background: #dc3545; }
+        .btn-primary { background: #0056b3; }
     </style>
 </head>
 <body>
-    <nav>
-        <span>Meus Materiais</span>
-    </nav>
-    <div class="container" th:fragment="content">
-        <h2 th:text="#{nav.meusMateriais}">Meus Materiais</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th th:text="#{material.titulo.label}">Título</th>
-                    <th th:text="#{material.categoria.label}">Categoria</th>
-                    <th th:text="#{material.estadoConservacao.label}">Estado</th>
-                    <th th:text="#{material.localRetirada.label}">Local</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="mat : ${materiais}">
-                    <td th:text="${mat.titulo}">Título</td>
-                    <td th:text="#{${'material.categoria.' + mat.categoria}}">Categoria</td>
-                    <td th:text="#{${'material.estadoConservacao.' + mat.estadoConservacao}}">Estado</td>
-                    <td th:text="${mat.localRetirada}">Local</td>
-                    <td class="table-actions">
-                        <a class="btn btn-edit" th:href="@{|/materiais/editar/${mat.id}|}" th:text="#{button.editar}">Editar</a>
-                        <a class="btn btn-delete" th:href="@{|/materiais/excluir/${mat.id}|}" th:text="#{button.excluir}" onclick="return confirm('Confirma exclusão?');">Excluir</a>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(materiais)}">
-                    <td colspan="5" th:text="#{material.naoEncontrado}">Nenhum material encontrado.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <section class="layout-content">
+        <nav>
+            <span th:text="#{nav.meusMateriais}">Meus Materiais</span>
+            <a class="btn btn-primary" th:href="@{/materiais/cadastrar}" role="button" th:text="#{button.novo.material}">Novo Material</a>
+        </nav>
 
-    <footer>
-        &copy; 2025 - Sistema de Gerenciamento de Estudantes
-    </footer>
+        <div class="container" id="listagem">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th th:text="#{material.id.label}">ID</th>
+                            <th th:text="#{material.fotos.label}">Foto</th>
+                            <th th:text="#{material.titulo.label}">Título</th>
+                            <th th:text="#{material.descricao.label}">Descrição</th>
+                            <th th:text="#{material.categoria.label}">Categoria</th>
+                            <th th:text="#{material.estadoConservacao.label}">Estado</th>
+                            <th th:text="#{material.localRetirada.label}">Local de Retirada</th>
+                            <th th:text="#{material.criadoEm.label}">Criação</th>
+                            <th th:text="#{material.atualizadoEm.label}">Atualização</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="material : ${materiais}">
+                            <td th:text="${material.id}"></td>
+                            <td>
+                                <img th:if="${material.imagem != null}" th:src="@{|/materiais/imagem/${material.id}|}" width="100" alt="Foto do material"/>
+                                <span th:if="${material.imagem == null}">-</span>
+                            </td>
+                            <td th:text="${material.titulo}"></td>
+                            <td th:text="${material.descricao}"></td>
+                            <td th:text="#{${'material.categoria.' + material.categoria}}"></td>
+                            <td th:text="#{${'material.estadoConservacao.' + material.estadoConservacao}}"></td>
+                            <td th:text="${material.localRetirada}"></td>
+                            <td th:text="${#temporals.format(material.criadoEm, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${#temporals.format(material.atualizadoEm, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td>
+                                <a class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id})}" role="button" th:text="#{button.editar}">Editar</a>
+                                <a class="btn btn-danger btn-sm" th:href="@{/materiais/excluir/{id}(id=${material.id})}" th:attr="onclick='return confirm(\'' + #{confirm.excluir} + '\');'" role="button" th:text="#{button.excluir}">Excluir</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(materiais)}">
+                            <td colspan="10" style="text-align: center;" th:text="#{material.naoEncontrado}">Nenhum material encontrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
