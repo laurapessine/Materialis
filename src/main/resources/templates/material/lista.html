@@ -149,59 +149,68 @@
     <section class="layout-content">
 
         <nav>
-            <span>Lista de Materiais</span>
-            <a class="btn btn-primary btn-md" th:href="@{/materiais/cadastrar}" role="button">
+            <span th:text="#{title.lista.materiais}">Lista de Materiais</span>
+            <a sec:authorize="hasRole('USER')" class="btn btn-primary btn-md" th:href="@{/materiais/cadastrar}" role="button" th:text="#{button.novo.material}">
                 Novo Material
             </a>
         </nav>
 
         <div class="container" id="listagem">
+            <form th:action="@{/materiais/listar}" method="get" class="filter-form">
+                <input type="text" name="palavra" th:value="${param.palavra}" placeholder="Buscar por palavra-chave..." />
+                <select name="categoria">
+                    <option value="" th:text="#{filtro.todas.categorias}">Todas as categorias</option>
+                    <option th:each="cat : ${T(br.ufscar.dc.dsw.domain.Material.Categoria).values()}"
+                            th:value="${cat}"
+                            th:text="#{${'material.categoria.' + cat}}"
+                            th:selected="${cat.toString() == param.categoria}">Categoria</option>
+                </select>
+                <button type="submit" class="btn btn-primary" th:text="#{button.filtrar}">Filtrar</button>
+            </form>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th th:text="#{material.fotos.label}">Foto</th>
                             <th th:text="#{material.titulo.label}">Título</th>
-                            <th th:text="#{material.descricao.label}">Descrição</th>
                             <th th:text="#{material.categoria.label}">Categoria</th>
                             <th th:text="#{material.estadoConservacao.label}">Estado</th>
-                            <th th:text="#{material.fotos.label}">Foto</th>
-                            <th th:text="#{material.localRetirada.label}">Local de Retirada</th>
-                            <th>Data de Criação</th>
-                            <th>Data de Atualização</th>
-                            <th>Dono</th>
+                            <th th:text="#{material.dono.label}">Dono</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="material : ${materiais}">
-                            <td th:text="${material.id}"></td>
-                            <td th:text="${material.titulo}"></td>
-                            <td th:text="${material.descricao}"></td>
-                            <td th:text="#{${'material.categoria.' + material.categoria}}"></td>
-                            <td th:text="#{${'material.estadoConservacao.' + material.estadoConservacao}}"></td>
                             <td>
-                                <img th:if="${material.imagem != null}" th:src="@{|/materiais/imagem/${material.id}|}" width="100" />
+                                <img th:if="${material.imagem != null}" th:src="@{|/materiais/imagem/${material.id}|}" width="100" alt="Foto do material"/>
                                 <span th:if="${material.imagem == null}">-</span>
                             </td>
-                            <td th:text="${material.localRetirada}"></td>
-                            <td th:text="${#temporals.format(material.criadoEm, 'dd/MM/yyyy HH:mm')}">01/01/2025 12:00</td>
-                            <td th:text="${#temporals.format(material.atualizadoEm, 'dd/MM/yyyy HH:mm')}">02/01/2025 15:30</td>
-                            <td th:text="${material.estudante != null ? material.estudante.nome : '-'}">Nome do Dono</td>
+                            <td th:text="${material.titulo}"></td>
+                            <td th:text="#{${'material.categoria.' + material.categoria}}"></td>
+                            <td th:text="#{${'material.estadoConservacao.' + material.estadoConservacao}}"></td>
+                            <td th:text="${material.estudante != null ? material.estudante.nome : '-'}"></td>
                             <td>
-                                <a class="btn btn-solicitar btn-sm" th:href="@{/emprestimos/solicitar/{id}(id=${material.id})}" onclick="return confirm('Confirma Solicitação do material?');" role="button">
-                                    Solicitar
-                                </a>
-                                <a class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id})}" role="button">
-                                    Editar
-                                </a>
-                                <a class="btn btn-danger btn-sm" th:href="@{/materiais/excluir/{id}(id=${material.id})}" onclick="return confirm('Confirma exclusão do material?');" role="button">
-                                    Excluir
-                                </a>
+                                <div sec:authorize="isAuthenticated()">
+                                    <a th:if="${material.estudante.id != usuarioLogadoId}"
+                                       class="btn btn-solicitar btn-sm" th:href="@{/emprestimos/solicitar/{id}(id=${material.id})}"
+                                       role="button" th:text="#{button.solicitar}">Solicitar</a>
+
+                                    <a th:if="${material.estudante.id == usuarioLogadoId}"
+                                       class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id})}"
+                                       role="button" th:text="#{button.editar}">Editar</a>
+
+                                    <a th:if="${material.estudante.id == usuarioLogadoId}"
+                                       class="btn btn-danger btn-sm" th:href="@{/materiais/excluir/{id}(id=${material.id})}"
+                                       th:attr="onclick='return confirm(\'' + #{confirm.excluir} + '\');'"
+                                       role="button" th:text="#{button.excluir}">Excluir</a>
+                                </div>
+                                <div sec:authorize="isAnonymous()">
+                                     <a class="btn btn-solicitar btn-sm" th:href="@{/login}" role="button" th:text="#{button.solicitar.login}">Solicitar</a>
+                                </div>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(materiais)}">
-                            <td colspan="7">Nenhum material encontrado.</td>
+                            <td colspan="6" style="text-align: center;" th:text="#{material.naoEncontrado}">Nenhum material encontrado.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -210,7 +219,7 @@
 
     </section>
     <footer>
-        &copy; 2025 - Sistema de Gerenciamento de Materiais
+        <p>&copy; 2025 - Sistema de Gerenciamento de Materiais</p>
     </footer>
 </body>
 </html>

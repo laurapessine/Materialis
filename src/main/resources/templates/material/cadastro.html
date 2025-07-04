@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'">Cadastro Material</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/style.css}"/> -->
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -142,21 +141,11 @@
             <li sec:authorize="isAnonymous()"><a th:href="@{/login}" th:text="#{nav.login}">Login</a></li>
         </ul>
     </nav>
-
     <main class="container">
         <section>
-            <h2 th:text="${material.id} == null ? 'Cadastrar Material' : 'Editar Material'">Título</h2>
+            <h2 th:text="${material.id} == null ? #{title.cadastrar.material} : #{title.editar.material}">Título</h2>
             <form th:object="${material}" th:action="${material.id} == null ? @{/materiais/salvar} : @{/materiais/editar}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:if="${material.id != null}" th:field="*{id}" />
-                <div>
-                    <label for="imagemFile" th:text="#{material.fotos.label}">Foto do Material</label>
-                    <input type="file" id="imagemFile" name="imagemFile" accept="image/png, image/jpeg, image/jpg"/>
-                    <small>Selecione uma imagem (PNG, JPG, JPEG).</small>
-                    <div th:if="${material.id != null and material.imagem != null}">
-                        <p>Imagem atual:</p>
-                        <img th:src="@{|/materiais/imagem/${material.id}|}" width="150" alt="Imagem do Material"/>
-                    </div>
-                </div>
                 <div>
                     <label for="titulo" th:text="#{material.titulo.label}">Título</label>
                     <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material"/>
@@ -188,14 +177,18 @@
                     <div class="error" th:if="${#fields.hasErrors('estadoConservacao')}" th:errors="*{estadoConservacao}"></div>
                 </div>
                 <div>
-                    <label for="fotos" th:text="#{material.fotos.label}">URLs das Fotos (JSON)</label>
-                    <input type="text" id="fotos" th:field="*{fotos}" placeholder="[&quot;url1&quot;, &quot;url2&quot;]"/>
-                    <small th:text="#{material.fotos.label} + ' (JSON)'">Informe um array JSON com as URLs.</small>
-                </div>
-                <div>
                     <label for="localRetirada" th:text="#{material.localRetirada.label}">Local de Retirada</label>
                     <input type="text" id="localRetirada" th:field="*{localRetirada}" placeholder="Local onde retirar"/>
                     <div class="error" th:if="${#fields.hasErrors('localRetirada')}" th:errors="*{localRetirada}"></div>
+                </div>
+                <div>
+                    <label for="imagemFile" th:text="#{material.fotos.label}">Foto do Material</label>
+                    <input type="file" id="imagemFile" name="imagemFile" accept="image/png, image/jpeg, image/jpg"/>
+                    <small>Selecione uma imagem (PNG, JPG, JPEG).</small>
+                    <div th:if="${material.id != null and material.imagem != null}">
+                        <p style="margin-top: 10px;">Imagem atual:</p>
+                        <img th:src="@{|/materiais/imagem/${material.id}|}" width="150" alt="Imagem do Material"/>
+                    </div>
                 </div>
                 <div>
                     <button type="submit" th:text="#{button.salvar}">Salvar</button>
@@ -204,7 +197,6 @@
             </form>
         </section>
     </main>
-
     <footer class="footer">
         <p>© 2025 Materialis</p>
     </footer>

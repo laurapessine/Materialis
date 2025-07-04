@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -50,15 +51,17 @@ public class MaterialController {
         return Material.EstadoConservacao.values();
     }
 
+    /**
+     * R05: Lista os materiais com filtro por categoria e/ou palavra-chave.
+     * A lógica foi simplificada para passar os parâmetros diretamente para a camada de serviço.
+     */
     @GetMapping("/listar")
-    public String listar(@RequestParam(value = "categoria", required = false) Categoria categoria, @RequestParam(value = "palavra", required = false) String palavra, ModelMap model) {
-        List<Material> materiais;
-        if (categoria != null) {
-            materiais = materialService.buscarDisponiveis(categoria, palavra); // não era pra ser null no lugar de palavra?
-        } else if (palavra != null && !palavra.isBlank()) {
-            materiais = materialService.buscarDisponiveis(null, palavra);
-        } else {
-            materiais = materialService.buscarDisponiveis(null, null);
+    public String listar(@RequestParam(value = "categoria", required = false) Categoria categoria, @RequestParam(value = "palavra", required = false) String palavra, ModelMap model, Principal principal) {
+        List<Material> materiais = materialService.buscarDisponiveis(categoria, palavra);
+        // R06: Garante que o usuário logado não possa solicitar o próprio material.
+        if (principal != null) {
+            Estudante usuarioLogado = estudanteService.buscarPorEmail(principal.getName());
+            model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
         }
         model.addAttribute("materiais", materiais);
         return "material/lista";
@@ -69,6 +72,10 @@ public class MaterialController {
         return "material/cadastro";
     }
 
+    /**
+     * R02 & R04: Salva um novo material com upload de imagem.
+     * O redirecionamento foi alterado para /meus-materiais para melhor UX.
+     */
     @PostMapping("/salvar")
     public String salvar(@Valid Material material, BindingResult result, @RequestParam("imagemFile") MultipartFile file, RedirectAttributes attr, Principal principal) throws IOException {
         if (result.hasErrors()) {
@@ -86,16 +93,11 @@ public class MaterialController {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.salvar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
-        } catch (Exception e) { // pensar sobre esse bloco
-            String code = e.getMessage();
-            if ("material.titulo.duplicado".equals(code)) {
-                result.rejectValue("titulo", "error.material.titulo.duplicado", messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
-            } else {
-                result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault()));
-            }
+        } catch (DataIntegrityViolationException e) { // Este catch é mais específico para erros de banco de dados, como constraints de unicidade.
+            result.reject("error.geral", messageSource.getMessage("error.geral", null, LocaleContextHolder.getLocale()));
             return "material/cadastro";
         }
-        return "redirect:/materiais/listar"; // está correto?
+        return "redirect:/materiais/meus-materiais";
     }
 
     @GetMapping("/imagem/{id}")
@@ -113,7 +115,7 @@ public class MaterialController {
         Material material = materialService.buscarPorId(id);
         if (material == null) {
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
-            return "redirect:/materiais/listar";
+            return "redirect:/materiais/meus-materiais";
         }
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         if (!material.getEstudante().getId().equals(dono.getId())) {
@@ -134,6 +136,7 @@ public class MaterialController {
             material.setTipoImagem(file.getContentType());
             material.setImagem(file.getBytes());
         } else {
+            // Mantém a imagem antiga se nenhuma nova for enviada.
             Material materialExistente = materialService.buscarPorId(material.getId());
             if (materialExistente != null) {
                 material.setImagem(materialExistente.getImagem());
@@ -147,26 +150,19 @@ public class MaterialController {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
-        } catch (Exception e) { // pensar sobre esse bloco
-            String code = e.getMessage();
-            if ("material.titulo.duplicado".equals(code)) {
-                result.rejectValue("titulo", "error.material.titulo.duplicado", 
-                messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
-            } else {
-                result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault())
-);
-            }
+        } catch (DataIntegrityViolationException e) {
+             result.reject("error.geral", messageSource.getMessage("error.geral", null, LocaleContextHolder.getLocale()));
             return "material/cadastro";
         }
-        return "redirect:/materiais/listar"; // está correto?
+        return "redirect:/materiais/meus-materiais";
     }
     
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id, ModelMap model, Principal principal, RedirectAttributes attr) {
+    public String excluir(@PathVariable Long id, Principal principal, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(id);
         if (material == null) {
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
-            return "redirect:/materiais/listar";
+            return "redirect:/materiais/meus-materiais";
         }
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         if (!material.getEstudante().getId().equals(dono.getId())) {
@@ -177,12 +173,16 @@ public class MaterialController {
             materialService.excluir(id);
             String msg = messageSource.getMessage("msg.sucesso.material.excluir", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
+            // Mensagem para o caso de o material estar vinculado a um empréstimo, por exemplo.
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.vinculado", null, LocaleContextHolder.getLocale()));
         }
-        return "redirect:/materiais/listar";
+        return "redirect:/materiais/meus-materiais";
     }
 
+    /**
+     * R07: Lista os materiais que o estudante logado colocou para empréstimo.
+     */
     @GetMapping("/meus-materiais")
     public String meusMateriais(ModelMap model, Principal principal) {
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
