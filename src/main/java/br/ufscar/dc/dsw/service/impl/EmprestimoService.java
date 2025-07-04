@@ -1,17 +1,17 @@
 package br.ufscar.dc.dsw.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import br.ufscar.dc.dsw.dao.IEmprestimoDAO;
 import br.ufscar.dc.dsw.domain.Emprestimo;
 import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
-import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
 import br.ufscar.dc.dsw.service.spec.IEmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
 
 @Service
 @Transactional

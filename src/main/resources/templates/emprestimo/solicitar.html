@@ -1,155 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0056b3;
-            color: #fff;
-            padding: 1rem 2rem;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 1rem;
-        }
-
-        nav ul li {
-            font-weight: bold;
-        }
-
-        nav span {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group label {
-            font-weight: bold;
-            color: #0056b3;
-        }
-
-        .form-control {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 0.5rem;
-            width: 100%;
-            font-size: 1rem;
-        }
-
-        .form-control.is-invalid {
-            border-color: #dc3545;
-        }
-
-        .invalid-feedback {
-            color: #dc3545;
-            font-size: 0.875rem;
-        }
-
-        button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            background: #0056b3;
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #004494;
-        }
-
-        footer {
-            bottom: 0;
-            position: fixed;
-            text-align: center;
-            width: 100%;
-            padding: 1rem;
-            background: #0056b3;
-            color: #fff;
-            margin-top: 2rem;
-        }
-    </style>
-</head>
-<body>
-    <section class="layout-content" layout:fragment="corpo">
-        <nav>
-            <ul>
-                <li><span>Solicitar Empréstimo</span></li>
-            </ul>
-            <a class="btn btn-primary" th:href="@{/materiais/listar}" role="button">
-                <span>Voltar aos Materiais</span>
-            </a>
-        </nav>
-
-        <div class="container" id="cadastro">
-            <form th:action="@{/emprestimos/salvarSolicitacao}" th:object="${emprestimo}" method="POST">
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="materialTitulo">Material</label>
-                        <input type="text" class="form-control" id="materialTitulo" th:value="${emprestimo.material.titulo}" readonly />
-                        <input type="hidden" id="id" th:field="*{material.id}" />
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="dataDevolucaoPrevista">Data de Devolução Prevista</label>
-                        <input type="date" class="form-control" id="dataDevolucaoPrevista"
-                            th:field="*{dataDevolucaoPrevista}"
-                            th:classappend="${#fields.hasErrors('dataDevolucaoPrevista')} ? 'is-invalid'" />
-                        <div class="invalid-feedback">
-                            <span th:errors="*{dataDevolucaoPrevista}"></span>
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                background: #f4f4f4;
+                color: #333;
+                line-height: 1.6;
+            }
+            nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #0056b3;
+                color: #fff;
+                padding: 1rem 2rem;
+            }
+            nav ul {
+                list-style: none;
+                display: flex;
+                gap: 1rem;
+            }
+            nav ul li {
+                font-weight: bold;
+            }
+            nav span {
+                color: #fff;
+                font-weight: bold;
+            }
+            .container {
+                max-width: 960px;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .form-group label {
+                font-weight: bold;
+                color: #0056b3;
+            }
+            .form-control {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 0.5rem;
+                width: 100%;
+                font-size: 1rem;
+            }
+            .form-control.is-invalid {
+                border-color: #dc3545;
+            }
+            .invalid-feedback {
+                color: #dc3545;
+                font-size: 0.875rem;
+            }
+            button {
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 4px;
+                background: #0056b3;
+                color: #fff;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+            button:hover {
+                background: #004494;
+            }
+            footer {
+                bottom: 0;
+                position: fixed;
+                text-align: center;
+                width: 100%;
+                padding: 1rem;
+                background: #0056b3;
+                color: #fff;
+                margin-top: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="layout-content" layout:fragment="corpo">
+            <nav>
+                <ul>
+                    <li>
+                        <span>Solicitar Empréstimo</span>
+                    </li>
+                </ul>
+                <a class="btn btn-primary" th:href="@{/materiais/listar}" role="button">
+                    <span>Voltar aos Materiais</span>
+                </a>
+            </nav>
+            <div class="container" id="cadastro">
+                <form th:action="@{/emprestimos/salvarSolicitacao}" th:object="${emprestimo}" method="POST">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="materialTitulo">Material</label>
+                            <input type="text" class="form-control" id="materialTitulo" th:value="${emprestimo.material.titulo}" readonly />
+                            <input type="hidden" id="id" th:field="*{material.id}" />
                         </div>
                     </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="justificativa">Justificativa</label>
-                        <textarea class="form-control" id="justificativa" placeholder="Motivo da solicitação (curto)"
-                            th:field="*{justificativa}" rows="3"
-                            th:classappend="${#fields.hasErrors('justificativa')} ? 'is-invalid'"></textarea>
-                        <div class="invalid-feedback">
-                            <span th:errors="*{justificativa}"></span>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="dataDevolucaoPrevista">Data de Devolução Prevista</label>
+                            <input type="date" class="form-control" id="dataDevolucaoPrevista" th:field="*{dataDevolucaoPrevista}" th:classappend="${#fields.hasErrors('dataDevolucaoPrevista')} ? 'is-invalid'" />
+                            <div class="invalid-feedback">
+                                <span th:errors="*{dataDevolucaoPrevista}"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- <input type="hidden" id="id" th:field="*{id}" /> -->
-
-                <button type="submit">Enviar Solicitação</button>
-            </form>
-        </div>
-    </section>
-    <footer>
-        &copy; 2025 - Sistema de Gerenciamento de Estudantes
-    </footer>
-</body>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="justificativa">Justificativa</label>
+                            <textarea class="form-control" id="justificativa" placeholder="Motivo da solicitação (curto)" th:field="*{justificativa}" rows="3" th:classappend="${#fields.hasErrors('justificativa')} ? 'is-invalid'"></textarea>
+                            <div class="invalid-feedback">
+                                <span th:errors="*{justificativa}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Enviar Solicitação</button>
+                </form>
+            </div>
+        </section>
+        <footer>&copy; 2025 - Sistema de Gerenciamento de Estudantes</footer>
+    </body>
 </html>
