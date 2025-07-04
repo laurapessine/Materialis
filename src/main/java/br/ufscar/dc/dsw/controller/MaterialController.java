@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +9,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,12 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
 import br.ufscar.dc.dsw.domain.Material.Categoria;
 import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 import br.ufscar.dc.dsw.service.spec.IMaterialService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Controller
@@ -50,7 +54,7 @@ public class MaterialController {
     public String listar(@RequestParam(value = "categoria", required = false) Categoria categoria, @RequestParam(value = "palavra", required = false) String palavra, ModelMap model) {
         List<Material> materiais;
         if (categoria != null) {
-            materiais = materialService.buscarDisponiveis(categoria, palavra);
+            materiais = materialService.buscarDisponiveis(categoria, palavra); // não era pra ser null no lugar de palavra?
         } else if (palavra != null && !palavra.isBlank()) {
             materiais = materialService.buscarDisponiveis(null, palavra);
         } else {
@@ -66,9 +70,14 @@ public class MaterialController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Material material, BindingResult result, RedirectAttributes attr, Principal principal) {
+    public String salvar(@Valid Material material, BindingResult result, @RequestParam("imagemFile") MultipartFile file, RedirectAttributes attr, Principal principal) throws IOException {
         if (result.hasErrors()) {
             return "material/cadastro";
+        }
+        if (file != null && !file.isEmpty()) {
+            material.setNomeImagem(StringUtils.cleanPath(file.getOriginalFilename()));
+            material.setTipoImagem(file.getContentType());
+            material.setImagem(file.getBytes());
         }
         String email = principal.getName();
         Estudante dono = estudanteService.buscarPorEmail(email);
@@ -77,17 +86,26 @@ public class MaterialController {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.salvar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
-        } catch (Exception e) {
+        } catch (Exception e) { // pensar sobre esse bloco
             String code = e.getMessage();
             if ("material.titulo.duplicado".equals(code)) {
                 result.rejectValue("titulo", "error.material.titulo.duplicado", messageSource.getMessage("error.material.titulo.duplicado", null, LocaleContextHolder.getLocale()));
             } else {
-                result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault())
-);
+                result.reject("", messageSource.getMessage("error.geral", null, Locale.getDefault()));
             }
             return "material/cadastro";
         }
-        return "redirect:/materiais/listar";
+        return "redirect:/materiais/listar"; // está correto?
+    }
+
+    @GetMapping("/imagem/{id}")
+    public void exibirImagem(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        Material material = materialService.buscarPorId(id);
+        if (material != null && material.getImagem() != null) {
+            response.setContentType(material.getTipoImagem());
+            response.getOutputStream().write(material.getImagem());
+            response.getOutputStream().close();
+        }
     }
 
     @GetMapping("/editar/{id}")
@@ -107,9 +125,21 @@ public class MaterialController {
     }
 
     @PostMapping("/editar")
-    public String editar(@Valid Material material, BindingResult result, RedirectAttributes attr, Principal principal) {
+    public String editar(@Valid Material material, BindingResult result, @RequestParam("imagemFile") MultipartFile file, RedirectAttributes attr, Principal principal) throws IOException {
         if (result.hasErrors()) {
             return "material/cadastro";
+        }
+        if (file != null && !file.isEmpty()) {
+            material.setNomeImagem(StringUtils.cleanPath(file.getOriginalFilename()));
+            material.setTipoImagem(file.getContentType());
+            material.setImagem(file.getBytes());
+        } else {
+            Material materialExistente = materialService.buscarPorId(material.getId());
+            if (materialExistente != null) {
+                material.setImagem(materialExistente.getImagem());
+                material.setNomeImagem(materialExistente.getNomeImagem());
+                material.setTipoImagem(materialExistente.getTipoImagem());
+            }
         }
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         material.setEstudante(dono);
@@ -117,7 +147,7 @@ public class MaterialController {
             materialService.salvar(material);
             String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
-        } catch (Exception e) {
+        } catch (Exception e) { // pensar sobre esse bloco
             String code = e.getMessage();
             if ("material.titulo.duplicado".equals(code)) {
                 result.rejectValue("titulo", "error.material.titulo.duplicado", 
@@ -128,7 +158,7 @@ public class MaterialController {
             }
             return "material/cadastro";
         }
-        return "redirect:/materiais/listar";
+        return "redirect:/materiais/listar"; // está correto?
     }
     
     @GetMapping("/excluir/{id}")

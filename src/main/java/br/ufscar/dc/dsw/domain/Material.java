@@ -40,8 +40,15 @@ public class Material extends AbstractEntity<Long> {
     @Column(name = "estado_conservacao", nullable = false)
     private EstadoConservacao estadoConservacao;
 
-    @Column(columnDefinition = "JSON")
-    private String fotos;
+    @Lob
+    @Column(nullable = true)
+    private byte[] imagem;
+
+    @Column(nullable = true, length = 100)
+    private String nomeImagem;
+
+    @Column(nullable = true, length = 30)
+    private String tipoImagem;
 
     @NotBlank(message = "{NotBlank.material.localRetirada}")
     @Column(name = "local_retirada", nullable = false, length = 255)
@@ -100,12 +107,28 @@ public class Material extends AbstractEntity<Long> {
         this.estadoConservacao = estadoConservacao;
     }
 
-    public String getFotos() {
-        return fotos;
+    public byte[] getImagem() {
+        return imagem;
     }
 
-    public void setFotos(String fotos) {
-        this.fotos = fotos;
+    public void setImagem(byte[] imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getNomeImagem() {
+        return nomeImagem;
+    }
+
+    public void setNomeImagem(String nomeImagem) {
+        this.nomeImagem = nomeImagem;
+    }
+
+    public String getTipoImagem() {
+        return tipoImagem;
+    }
+
+    public void setTipoImagem(String tipoImagem) {
+        this.tipoImagem = tipoImagem;
     }
 
     public String getLocalRetirada() {

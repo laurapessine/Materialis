@@ -165,7 +165,7 @@
                             <th th:text="#{material.descricao.label}">Descrição</th>
                             <th th:text="#{material.categoria.label}">Categoria</th>
                             <th th:text="#{material.estadoConservacao.label}">Estado</th>
-                            <th th:text="#{material.fotos.label}">Fotos</th>
+                            <th th:text="#{material.fotos.label}">Foto</th>
                             <th th:text="#{material.localRetirada.label}">Local de Retirada</th>
                             <th>Data de Criação</th>
                             <th>Data de Atualização</th>
@@ -181,8 +181,8 @@
                             <td th:text="#{${'material.categoria.' + material.categoria}}"></td>
                             <td th:text="#{${'material.estadoConservacao.' + material.estadoConservacao}}"></td>
                             <td>
-                                <span th:if="${material.fotos != null}" th:text="${material.fotos}">["url1","url2"]</span>
-                                <span th:if="${material.fotos == null}">-</span>
+                                <img th:if="${material.imagem != null}" th:src="@{|/materiais/imagem/${material.id}|}" width="100" />
+                                <span th:if="${material.imagem == null}">-</span>
                             </td>
                             <td th:text="${material.localRetirada}"></td>
                             <td th:text="${#temporals.format(material.criadoEm, 'dd/MM/yyyy HH:mm')}">01/01/2025 12:00</td>
