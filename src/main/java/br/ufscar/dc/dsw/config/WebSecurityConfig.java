@@ -29,8 +29,9 @@ public class WebSecurityConfig {
                 .requestMatchers("/home").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/error").permitAll()
-                .requestMatchers("/materiais/listar").permitAll() // R5: Listagem de materiais disponíveis (não requer login)
-                .requestMatchers("/estudantes/**").hasRole("ADMIN") // R1: CRUD de estudantes (requer login de administrador)
+                .requestMatchers("/materiais/listar").permitAll()
+                .requestMatchers("/estudantes/**").hasRole("ADMIN")
+                .requestMatchers("/materiais/imagem/**").permitAll() // Permite o acesso público às imagens
                 .requestMatchers("/materiais/cadastrar").hasRole("USER") // R4: Cadastro de materiais (requer login de estudante)
                 .requestMatchers("/materiais/salvar").hasRole("USER")
                 .requestMatchers("/materiais/editar/**").hasRole("USER")
