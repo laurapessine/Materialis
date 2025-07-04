@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-BR">
     <head>
         <meta charset="UTF-8" />
         <title th:text="#{nav.meusEmprestimos}">Meus Empréstimos</title>
@@ -31,12 +31,11 @@
             .container {
                 max-width: 1280px;
                 margin: 2rem auto;
-                padding: 2rem;
+                padding: 1rem;
                 background: #fff;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-           
-           }
+            }
             .table {
                 width: 100%;
                 border-collapse: collapse;
@@ -75,7 +74,7 @@
     <body>
         <section class="layout-content">
             <nav>
-                <span th:text="#{nav.meusEmprestimos}">Meus Empréstimos Solicitados</span>
+                <span th:text="#{nav.meusEmprestimos}">Meus Empréstimos</span>
             </nav>
             <div class="container" id="listagem">
                 <div class="table-responsive">
@@ -89,7 +88,7 @@
                                 <th th:text="#{emprestimo.dataDevolucaoPrevista.label}">Devolução Prevista</th>
                                 <th th:text="#{emprestimo.dataDevolucaoReal.label}">Devolução Real</th>
                                 <th th:text="#{emprestimo.status.label}">Status</th>
-                                <th>Ação</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
