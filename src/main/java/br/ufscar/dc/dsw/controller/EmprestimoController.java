@@ -23,7 +23,6 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/emprestimos")
 public class EmprestimoController {
-
     @Autowired
     private IEmprestimoService emprestimoService;
 
@@ -46,7 +45,6 @@ public class EmprestimoController {
     public String solicitarEmprestimo(@PathVariable("materialId") Long materialId, ModelMap model, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(materialId);
         Estudante estudante = getLoggedInEstudante();
-
         if (material == null) {
             attr.addFlashAttribute("fail", "Material não encontrado.");
             return "redirect:/materiais/listar";
@@ -55,12 +53,10 @@ public class EmprestimoController {
             attr.addFlashAttribute("fail", "Você precisa estar logado como estudante para solicitar um empréstimo.");
             return "redirect:/login";
         }
-
         if (emprestimoService.hasOpenProposal(estudante, material)) {
             attr.addFlashAttribute("fail", "Você já tem uma proposta em aberto para este material.");
             return "redirect:/materiais/listar";
         }
-
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.setMaterial(material);
         emprestimo.setEstudante(estudante);
@@ -72,22 +68,19 @@ public class EmprestimoController {
     public String salvarSolicitacao(@Valid Emprestimo emprestimo, BindingResult result, RedirectAttributes attr, ModelMap model) {
         Estudante estudante = getLoggedInEstudante();
         if (estudante == null) {
-             attr.addFlashAttribute("fail", "Sessão de estudante inválida.");
-             return "redirect:/login";
+            attr.addFlashAttribute("fail", "Sessão de estudante inválida.");
+            return "redirect:/login";
         }
         emprestimo.setEstudante(estudante);
-
         if (result.hasErrors()) {
             model.addAttribute("material", emprestimo.getMaterial());
             return "emprestimo/solicitar";
         }
-
         if (emprestimoService.hasOpenProposal(estudante, emprestimo.getMaterial())) {
             result.rejectValue("material", "error.emprestimo", "Você já tem uma proposta em aberto para este material.");
             model.addAttribute("material", emprestimo.getMaterial());
             return "emprestimo/solicitar";
         }
-
         emprestimoService.salvar(emprestimo);
         attr.addFlashAttribute("sucesso", "Solicitação de empréstimo enviada com sucesso!");
         return "redirect:/materiais/listar";
@@ -129,9 +122,7 @@ public class EmprestimoController {
     }
 
     @PostMapping("/recusar/{id}")
-    public String recusarEmprestimo(@PathVariable("id") Long id,
-                                   @RequestParam(value = "justificativa", required = false) String justificativa,
-                                   RedirectAttributes attr) {
+    public String recusarEmprestimo(@PathVariable("id") Long id, @RequestParam(value = "justificativa", required = false) String justificativa, RedirectAttributes attr) {
         emprestimoService.recusarEmprestimo(id, justificativa);
         attr.addFlashAttribute("sucesso", "Empréstimo recusado com sucesso!");
         return "redirect:/emprestimos/solicitacoes-para-meus-materiais";

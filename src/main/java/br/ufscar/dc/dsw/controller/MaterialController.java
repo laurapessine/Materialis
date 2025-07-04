@@ -3,7 +3,6 @@ package br.ufscar.dc.dsw.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -31,7 +30,6 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/materiais")
 public class MaterialController {
-
     @Autowired
     private IMaterialService materialService;
 
@@ -151,7 +149,7 @@ public class MaterialController {
             String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
             attr.addFlashAttribute("sucesso", msg);
         } catch (DataIntegrityViolationException e) {
-             result.reject("error.geral", messageSource.getMessage("error.geral", null, LocaleContextHolder.getLocale()));
+            result.reject("error.geral", messageSource.getMessage("error.geral", null, LocaleContextHolder.getLocale()));
             return "material/cadastro";
         }
         return "redirect:/materiais/meus-materiais";

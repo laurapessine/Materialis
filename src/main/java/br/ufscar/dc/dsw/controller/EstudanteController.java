@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/estudantes")
 @PreAuthorize("hasRole('ADMIN')")
 public class EstudanteController {
-    @Autowired
+	@Autowired
 	private IEstudanteService service;
 	
 	@GetMapping("/cadastrar")
@@ -29,13 +29,12 @@ public class EstudanteController {
 	
 	@GetMapping("/listar")
 	public String listar(ModelMap model) {
-		model.addAttribute("estudantes",service.buscarTodos());
+		model.addAttribute("estudantes", service.buscarTodos());
 		return "estudante/lista";
 	}
 	
 	@PostMapping("/salvar")
 	public String salvar(@Valid Estudante estudante, BindingResult result, RedirectAttributes attr) {
-		
 		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
@@ -57,18 +56,17 @@ public class EstudanteController {
 	
 	@PostMapping("/editar")
 	public String editar(@Valid Estudante estudante, BindingResult result, RedirectAttributes attr) {
-		
 		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
 		try {
-        	service.salvar(estudante);
-        	attr.addFlashAttribute("sucess", "Estudante editado com sucesso.");
+			service.salvar(estudante);
+			attr.addFlashAttribute("sucess", "Estudante editado com sucesso.");
 			return "redirect:/estudantes/listar";
-  		} catch (DataIntegrityViolationException e) {
-        	result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
-        	return "redirect:/estudantes/listar";
-    	}
+		} catch (DataIntegrityViolationException e) {
+			result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
+			return "redirect:/estudantes/listar";
+		}
 	}
 	
 	@GetMapping("/excluir/{id}")
