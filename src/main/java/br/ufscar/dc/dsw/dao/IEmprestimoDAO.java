@@ -7,7 +7,7 @@ import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
 
 public interface IEmprestimoDAO extends CrudRepository<Emprestimo, Long> {
-    Emprestimo findById(long id);
+    List<Emprestimo> findAll();
 
     List<Emprestimo> findByEstudante(Estudante estudante);
 
