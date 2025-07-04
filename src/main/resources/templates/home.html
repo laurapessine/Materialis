@@ -6,40 +6,70 @@
         <title>Materialis - Início</title>
         <style>
             body {
-                font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background: #f4f4f4;
             }
             header {
-                background: #0056b3; color: #fff; padding: 1rem;
+                background: #0056b3;
+                color: #fff;
+                padding: 1rem;
             }
             nav {
-                display: flex; gap: 1rem;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
             }
             nav a {
-                color: #fff; text-decoration: none; font-weight: bold;
+                color: #fff;
+                text-decoration: none;
+                font-weight: bold;
+                padding: 0.5rem;
             }
             .container {
-                max-width: 960px; margin: 2rem auto; padding: 0 1rem;
+                max-width: 960px;
+                margin: 2rem auto;
+                padding: 0 1rem;
             }
             h1 {
                 margin-bottom: 0.5rem;
             }
             .cards {
-                display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-top: 1.5rem;
             }
             .card {
-                background: #fff; border-radius: 0.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; min-width: 200px; padding: 1.5rem; text-align: center;
+                background: #fff;
+                border-radius: 0.5rem;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                flex: 1;
+                min-width: 200px;
+                padding: 1.5rem;
+                text-align: center;
             }
             .card h2 {
                 margin-top: 0;
             }
             .button {
-                display: inline-block; margin-top: 1rem; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; background: #0056b3; color: #fff;
+                display: inline-block;
+                margin-top: 1rem;
+                text-decoration: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                background: #0056b3;
+                color: #fff;
             }
             .button:hover {
                 background: #004494;
             }
             footer {
-                text-align: center; padding: 1rem; background: #eee; margin-top: 2rem;
+                text-align: center;
+                padding: 1rem;
+                background: #eee;
+                margin-top: 2rem;
             }
         </style>
     </head>
@@ -48,10 +78,16 @@
             <nav class="container">
                 <a th:href="@{/}">Home</a>
                 <a th:href="@{/materiais/listar}">Explorar Materiais</a>
-                <a th:href="@{/estudantes/listar}">Gerenciar Estudantes</a> <a th:href="@{/materiais/meus-materiais}">Meus Materiais</a>
-                <a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a>
-                <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Gerenciar Solicitações</a>
-                <a th:href="@{/login}">Login</a>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/estudantes/listar}">Gerenciar Estudantes</a>
+                <div sec:authorize="hasRole('USER')">
+                    <a th:href="@{/materiais/meus-materiais}">Meus Materiais</a>
+                    <a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a>
+                    <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Gerenciar Solicitações</a>
+                </div>
+                <a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a>
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding: 0.5rem;">Logout</button>
+                </form>
             </nav>
         </header>
         <main class="container">
@@ -63,27 +99,28 @@
                     <p>Encontre materiais disponíveis para empréstimo.</p>
                     <a th:href="@{/materiais/listar}" class="button">Ver Materiais</a>
                 </div>
-                <div class="card">
+                <div class="card" sec:authorize="hasRole('USER')">
                     <h2>Meus Materiais</h2>
                     <p>Gerencie os materiais que você disponibilizou.</p>
                     <a th:href="@{/materiais/meus-materiais}" class="button">Meus Materiais</a>
                 </div>
-                <div class="card">
+                <div class="card" sec:authorize="hasRole('USER')">
                     <h2>Meus Empréstimos</h2>
                     <p>Acompanhe suas solicitações de empréstimo.</p>
                     <a th:href="@{/emprestimos/meus-emprestimos}" class="button">Meus Empréstimos</a>
                 </div>
-                <div class="card">
+                <div class="card" sec:authorize="hasRole('USER')">
                     <h2>Gerenciar Solicitações</h2>
-                    <p>Aprove ou recuse pedidos de empréstimo para seus materiais.</p>
+                    <p>Aprove ou recuse pedidos de empréstimo.</p>
                     <a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}" class="button">Gerenciar</a>
                 </div>
-                <div class="card" sec:authorize="hasRole('ADMIN')"> <h2>Gerenciar Estudantes</h2>
+                <div class="card" sec:authorize="hasRole('ADMIN')">
+                    <h2>Gerenciar Estudantes</h2>
                     <p>Gerencie os usuários do sistema (Admin).</p>
                     <a th:href="@{/estudantes/listar}" class="button">Ver Estudantes</a>
                 </div>
             </div>
         </main>
-        <footer>&copy; 2025 Materialis - Todos os direitos reservados</footer>
+        <footer>&copy;2025 Materialis - Todos os direitos reservados</footer>
     </body>
 </html>
