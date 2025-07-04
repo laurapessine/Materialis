@@ -56,12 +56,15 @@ public class MaterialController {
     @GetMapping("/listar")
     public String listar(@RequestParam(value = "categoria", required = false) Categoria categoria, @RequestParam(value = "palavra", required = false) String palavra, ModelMap model, Principal principal) {
         List<Material> materiais = materialService.buscarDisponiveis(categoria, palavra);
-        // R06: Garante que o usuário logado não possa solicitar o próprio material.
+        model.addAttribute("materiais", materiais);
         if (principal != null) {
             Estudante usuarioLogado = estudanteService.buscarPorEmail(principal.getName());
-            model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
+            if (usuarioLogado != null) {
+                model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
+            }
+        } else {
+            model.addAttribute("usuarioLogadoId", 0L); 
         }
-        model.addAttribute("materiais", materiais);
         return "material/lista";
     }
 

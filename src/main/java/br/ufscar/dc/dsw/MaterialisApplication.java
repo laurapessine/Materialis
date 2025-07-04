@@ -66,7 +66,7 @@ public class MaterialisApplication {
                     m1.setEstadoConservacao(EstadoConservacao.NOVO);
                     m1.setLocalRetirada("Biblioteca Central");
                     m1.setEstudante(lorena);                    
-                    File file1 = new ClassPathResource("static/images/kit_papelaria.jpg").getFile();
+                    File file1 = new ClassPathResource("static/images/kit_papelaria.jpeg").getFile();
                     m1.setNomeImagem(file1.getName());
                     m1.setTipoImagem(Files.probeContentType(file1.toPath()));
                     m1.setImagem(Files.readAllBytes(file1.toPath()));
