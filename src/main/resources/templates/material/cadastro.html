@@ -146,6 +146,7 @@
             <h2 th:text="${material.id} == null ? #{title.cadastrar.material} : #{title.editar.material}">Título</h2>
             <form th:object="${material}" th:action="${material.id} == null ? @{/materiais/salvar} : @{/materiais/editar}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:if="${material.id != null}" th:field="*{id}" />
+                <input type="hidden" name="origem" th:value="${origem}" />
                 <div>
                     <label for="titulo" th:text="#{material.titulo.label}">Título</label>
                     <input type="text" id="titulo" th:field="*{titulo}" placeholder="Título do material"/>

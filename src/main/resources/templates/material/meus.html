@@ -179,7 +179,7 @@
                             <td th:text="${#temporals.format(material.criadoEm, 'dd/MM/yyyy HH:mm')}"></td>
                             <td th:text="${#temporals.format(material.atualizadoEm, 'dd/MM/yyyy HH:mm')}"></td>
                             <td>
-                                <a class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id})}" role="button" th:text="#{button.editar}">Editar</a>
+                                <a class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id}, origem='meus')}" role="button" th:text="#{button.editar}">Editar</a>
                                 <a class="btn btn-danger btn-sm" th:href="@{/materiais/excluir/{id}(id=${material.id})}" th:attr="onclick='return confirm(\'' + #{confirm.excluir} + '\');'" role="button" th:text="#{button.excluir}">Excluir</a>
                             </td>
                         </tr>

@@ -27,8 +27,7 @@ public class MaterialisApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(IEstudanteDAO estudanteDAO, IMaterialService materialService,
-            IEmprestimoService emprestimoService, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner demo(IEstudanteDAO estudanteDAO, IMaterialService materialService, IEmprestimoService emprestimoService, PasswordEncoder passwordEncoder) {
         return (args) -> {
             
             // 0. CRIAÇÃO DO ADMIN

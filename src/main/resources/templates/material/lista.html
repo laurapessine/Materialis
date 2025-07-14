@@ -272,7 +272,7 @@
                             <td>
                                 <div sec:authorize="isAuthenticated()">
                                     <a th:if="${material.estudante.id != usuarioLogadoId}" class="btn btn-solicitar btn-sm" th:href="@{/emprestimos/solicitar/{id}(id=${material.id})}" role="button" th:text="#{button.solicitar}">Solicitar</a>
-                                    <a th:if="${material.estudante.id == usuarioLogadoId}" class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id})}" role="button" th:text="#{button.editar}">Editar</a>
+                                    <a th:if="${material.estudante.id == usuarioLogadoId}" class="btn btn-info btn-sm" th:href="@{/materiais/editar/{id}(id=${material.id}, origem='listar')}" role="button" th:text="#{button.editar}">Editar</a>
                                     <a th:if="${material.estudante.id == usuarioLogadoId}" class="btn btn-danger btn-sm" th:href="@{/materiais/excluir/{id}(id=${material.id})}" th:attr="onclick='return confirm(\'' + #{confirm.excluir} + '\');'" role="button" th:text="#{button.excluir}">Excluir</a>
                                 </div>
                                 <div sec:authorize="isAnonymous()">

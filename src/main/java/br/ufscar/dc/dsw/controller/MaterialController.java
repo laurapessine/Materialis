@@ -112,7 +112,7 @@ public class MaterialController {
     }
 
     @GetMapping("/editar/{id}")
-    public String preEditar(@PathVariable Long id, ModelMap model, Principal principal, RedirectAttributes attr) {
+    public String preEditar(@PathVariable Long id, @RequestParam(name = "origem", required = false) String origem, ModelMap model, Principal principal, RedirectAttributes attr) {
         Material material = materialService.buscarPorId(id);
         if (material == null) {
             attr.addFlashAttribute("fail", messageSource.getMessage("error.material.nao.encontrado", null, LocaleContextHolder.getLocale()));
@@ -124,11 +124,12 @@ public class MaterialController {
             return "redirect:/materiais/listar";
         }
         model.addAttribute("material", material);
+        model.addAttribute("origem", origem);
         return "material/cadastro";
     }
 
     @PostMapping("/editar")
-    public String editar(@Valid Material material, BindingResult result, @RequestParam("imagemFile") MultipartFile file, RedirectAttributes attr, Principal principal) throws IOException {
+    public String editar(@Valid Material material, BindingResult result, @RequestParam("imagemFile") MultipartFile file, @RequestParam(name = "origem", required = false) String origem, RedirectAttributes attr, Principal principal) throws IOException {
         if (result.hasErrors()) {
             return "material/cadastro";
         }
@@ -137,7 +138,6 @@ public class MaterialController {
             material.setTipoImagem(file.getContentType());
             material.setImagem(file.getBytes());
         } else {
-            // Mantém a imagem antiga se nenhuma nova for enviada.
             Material materialExistente = materialService.buscarPorId(material.getId());
             if (materialExistente != null) {
                 material.setImagem(materialExistente.getImagem());
@@ -147,13 +147,10 @@ public class MaterialController {
         }
         Estudante dono = estudanteService.buscarPorEmail(principal.getName());
         material.setEstudante(dono);
-        try {
-            materialService.salvar(material);
-            String msg = messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale());
-            attr.addFlashAttribute("sucesso", msg);
-        } catch (DataIntegrityViolationException e) {
-            result.reject("error.geral", messageSource.getMessage("error.geral", null, LocaleContextHolder.getLocale()));
-            return "material/cadastro";
+        materialService.salvar(material);
+        attr.addFlashAttribute("sucesso", messageSource.getMessage("msg.sucesso.material.editar", null, LocaleContextHolder.getLocale()));
+        if ("listar".equals(origem)) {
+            return "redirect:/materiais/listar";
         }
         return "redirect:/materiais/meus-materiais";
     }
