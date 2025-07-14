@@ -12,7 +12,7 @@ import br.ufscar.dc.dsw.domain.Material.Categoria;
 import br.ufscar.dc.dsw.service.spec.IMaterialService;
 
 @Service
-@Transactional(readOnly = true) // Boa prática: transações são somente leitura por padrão
+@Transactional(readOnly = true)
 public class MaterialService implements IMaterialService {
     @Autowired
     private IMaterialDAO dao;
@@ -24,7 +24,7 @@ public class MaterialService implements IMaterialService {
 
     @Override
     public List<Material> buscarTodos() {
-        return (List<Material>) dao.findAll(); // Cast para List
+        return (List<Material>) dao.findAll();
     }
 
     @Override
@@ -38,16 +38,11 @@ public class MaterialService implements IMaterialService {
     @Override
     public List<Material> buscarPorPalavraChave(String palavra) {
         if (palavra == null || palavra.isBlank()) {
-            return Collections.emptyList(); // Retorna lista vazia se não houver palavra
+            return Collections.emptyList(); 
         }
         return dao.findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(palavra, palavra);
     }
 
-    /**
-     * Lógica de busca combinada.
-     * Agora, os filtros de categoria e palavra-chave funcionam juntos.
-     * Esta lógica delega a complexidade para a camada DAO (assumindo que o método foi criado lá).
-     */
     @Override
     public List<Material> buscarDisponiveis(Categoria categoria, String palavra) {
         boolean hasPalavra = palavra != null && !palavra.isBlank();
@@ -70,20 +65,19 @@ public class MaterialService implements IMaterialService {
     @Override
     public List<Material> buscarPorDono(Estudante estudante) {
         if (estudante == null) {
-            return Collections.emptyList(); // Retorna lista vazia para evitar erros
+            return Collections.emptyList();
         }
         return dao.findByEstudante(estudante);
     }
 
     @Override
-    @Transactional(readOnly = false) // Habilita a escrita para este método
+    @Transactional(readOnly = false) 
     public void salvar(Material material) {
-        // O código antigo referente a 'fotos' foi removido, pois agora usamos 'imagem'.
         dao.save(material);
     }
 
     @Override
-    @Transactional(readOnly = false) // Habilita a escrita para este método
+    @Transactional(readOnly = false) 
     public void excluir(Long id) {
         dao.deleteById(id);
     }

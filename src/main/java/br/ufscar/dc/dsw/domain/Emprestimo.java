@@ -1,6 +1,9 @@
 package br.ufscar.dc.dsw.domain;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,14 +16,16 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+
 @Entity
-@Table(name = "Emprestimo")
+@Table(name = "emprestimo")
 public class Emprestimo extends AbstractEntity<Long> {
     @NotNull(message = "{NotNull.emprestimo.estudante}")
     @ManyToOne
     @JoinColumn(name = "estudante_id", nullable = false)
     private Estudante estudante;
 
+    @JsonIgnore
     @NotNull(message = "{NotNull.emprestimo.material}")
     @ManyToOne
     @JoinColumn(name = "material_id", nullable = false)
@@ -28,7 +33,7 @@ public class Emprestimo extends AbstractEntity<Long> {
 
     @NotNull(message = "{NotNull.emprestimo.dataSolicitacao}")
     @Column(name = "data_solicitacao", nullable = false, updatable = false)
-    private LocalDate dataSolicitacao;
+    private LocalDate dataSolicitacao = LocalDate.now(); 
 
     @NotNull(message = "{NotNull.emprestimo.dataDevolucaoPrevista}")
     @FutureOrPresent(message = "{FutureOrPresent.emprestimo.dataDevolucaoPrevista}")
@@ -53,7 +58,7 @@ public class Emprestimo extends AbstractEntity<Long> {
     @NotNull(message = "{NotNull.emprestimo.status}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Status status;
+    private Status status = Status.ABERTO;
 
     @PrePersist
     protected void onCreate() {

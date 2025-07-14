@@ -27,4 +27,6 @@ public interface IEmprestimoService {
     void iniciarEmprestimo(Long id);
 
     void concluirEmprestimo(Long id);
+
+    List<Emprestimo> buscarPorMaterial(Material material);
 }

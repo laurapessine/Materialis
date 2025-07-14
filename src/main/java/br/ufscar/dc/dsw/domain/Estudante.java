@@ -16,9 +16,12 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "Estudante")
+@Table(name = "estudante")
 public class Estudante extends AbstractEntity<Long> {
 	@NotBlank(message = "{NotBlank.estudante.nome}")
 	@Size(max = 256, message = "{Size.estudante.nome}")
@@ -31,6 +34,7 @@ public class Estudante extends AbstractEntity<Long> {
 	@Column(nullable = false, unique = true, length = 200)
 	private String email;
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@NotBlank(message = "{NotBlank.estudante.senha}")
 	@Size(min = 6, max = 60, message = "{Size.estudante.senha}")
 	@Column(nullable = false, length = 60)
@@ -51,6 +55,9 @@ public class Estudante extends AbstractEntity<Long> {
 	@Column(nullable = false, unique = true, length = 11)
 	private String telefone;
 
+	@Column(nullable = false, length = 10)
+    private String role;
+
 	public enum Sexo {
 		Feminino,
 		Masculino,
@@ -68,9 +75,11 @@ public class Estudante extends AbstractEntity<Long> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate nascimento;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "estudante")
 	private List<Material> materiais;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "estudante")
 	private List<Emprestimo> emprestimosSolicitados;
 
@@ -137,6 +146,14 @@ public class Estudante extends AbstractEntity<Long> {
 	public void setNascimento(LocalDate nascimento) {
 		this.nascimento = nascimento;
 	}
+
+	public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
 	public List<Material> getMateriais() {
 		return materiais;

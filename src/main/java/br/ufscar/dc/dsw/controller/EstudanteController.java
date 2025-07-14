@@ -15,12 +15,18 @@ import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 import jakarta.validation.Valid;
 
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Controller
 @RequestMapping("/estudantes")
 @PreAuthorize("hasRole('ADMIN')")
 public class EstudanteController {
 	@Autowired
 	private IEstudanteService service;
+
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/cadastrar")
 	public String cadastrar(Estudante estudante) {
@@ -38,13 +44,27 @@ public class EstudanteController {
 		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
-		try {
-			service.salvar(estudante);
-			attr.addFlashAttribute("sucess", "Estudante inserido com sucesso.");
-		} catch (DataIntegrityViolationException e) {
-			result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
+
+		if (estudante.getId() == null) {
+			Estudante existente = service.buscarPorCPF(estudante.getCpf());
+			if (existente != null) {
+				result.rejectValue("cpf", "error.estudante", "CPF já cadastrado.");
+			}
+			
+			existente = service.buscarPorEmail(estudante.getEmail());
+			if (existente != null) {
+				result.rejectValue("email", "error.estudante", "Email já cadastrado.");
+			}
+		}
+		if (result.hasErrors()) {
 			return "estudante/cadastro";
 		}
+		estudante.setRole("ROLE_USER");
+
+		estudante.setSenha(passwordEncoder.encode(estudante.getSenha()));
+		service.salvar(estudante);
+		
+		attr.addFlashAttribute("sucess", "Estudante salvo com sucesso.");
 		return "redirect:/estudantes/listar";
 	}
 	

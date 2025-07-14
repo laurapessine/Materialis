@@ -18,36 +18,67 @@
 			padding: 0;
 		}
 
-		nav {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background: #0056b3;
-			color: #fff;
-			padding: 1rem 2rem;
-		}
-
-		nav ul {
-			list-style: none;
-			display: flex;
-			gap: 1rem;
-		}
-
-		nav ul li {
-			display: inline;
-		}
-
-		nav a {
-			color: #fff;
-			text-decoration: none;
-			font-weight: bold;
-			padding: 0.5rem 1rem;
-			border-radius: 0.25rem;
-		}
-
-		nav a:hover {
-			background: #004494;
-		}
+		.main-header {
+            background-color: #0056b3; 
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            border-bottom: 1px solid #0056b3;
+        }
+        .main-header .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ddd; 
+            text-decoration: none;
+        }
+        .main-header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .main-header nav a {
+            color: #ddd; 
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .main-header nav a:hover {
+            color: #0056b3;
+        }
+        .main-header .logout-form button {
+            background: none; border: none; color: #ddd;
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+            font-family: inherit;
+        }
+        .main-header .logout-form button:hover {
+            color: #0056b3;
+        }
+        
+        .page-action-header {
+            background-color: #0056b3;
+            padding: 1rem 2rem;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-action-header .page-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .page-action-header .btn-primary {
+            background-color: #fff;
+            color: #0056b3;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
 
 		.container {
 			max-width: 960px;
@@ -141,18 +172,25 @@
 <body>
 	<section class="layout-content" layout:fragment="corpo">
 
-		<nav class="navbar navbar-expand-md bg-light">
-			 <div class="collapse navbar-collapse" id="navbarsDefault">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<span>Lista de Estudantes</span>
-					</li>
-				</ul>
-				<a class="btn btn-primary btn-md" th:href="@{/estudantes/cadastrar}" role="button"> 
-					<span>Novo Estudante</span>
-				</a>
-			</div>
-		</nav> 
+		<header class="main-header">
+        <a th:href="@{/}" class="logo">Materialis</a>
+        <nav>
+            <ul>
+                <li><a th:href="@{/materiais/listar}">Explorar Materiais</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/estudantes/listar}">Gerenciar Estudantes</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="logout-form">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-action-header">
+        <span class="page-title">Lista de Estudantes</span>
+        <a class="btn-primary" th:href="@{/estudantes/cadastrar}" role="button">Novo Estudante</a>
+    </div>
 
 		<div class="container" id="listagem">
 			

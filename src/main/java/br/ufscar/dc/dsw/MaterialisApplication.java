@@ -31,6 +31,22 @@ public class MaterialisApplication {
             IEmprestimoService emprestimoService, PasswordEncoder passwordEncoder) {
         return (args) -> {
             
+            // 0. CRIAÇÃO DO ADMIN
+            if (estudanteDAO.findByEmail("admin@materialis.com") == null) {
+            Estudante admin = new Estudante();
+            admin.setEmail("admin@materialis.com");
+            admin.setSenha(passwordEncoder.encode("admin")); 
+            admin.setNome("Administrador");
+            admin.setCpf("00000000000"); 
+            admin.setTelefone("00000000000");
+            admin.setSexo(Estudante.Sexo.Outro);
+            admin.setNascimento(LocalDate.of(1990, 1, 1)); 
+            admin.setRa("000000");
+            admin.setRole("ROLE_ADMIN");
+            estudanteDAO.save(admin);
+            System.out.println("Usuário 'admin' criado com sucesso!");
+        }
+
             // 1. CRIAÇÃO DOS ESTUDANTES
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             if (estudanteDAO.findByEmail("lorena@gmail.com") == null) {
@@ -43,6 +59,7 @@ public class MaterialisApplication {
                 e1.setSenha(passwordEncoder.encode("123abc"));
                 e1.setSexo(Estudante.Sexo.Feminino);
                 e1.setTelefone("16179238224");
+                e1.setRole("ROLE_USER");
                 estudanteDAO.save(e1);
             }
             if (estudanteDAO.findByEmail("luis@gmail.com") == null) {
@@ -55,6 +72,7 @@ public class MaterialisApplication {
                 e2.setSenha(passwordEncoder.encode("password"));
                 e2.setSexo(Estudante.Sexo.Masculino);
                 e2.setTelefone("11987654321");
+                e2.setRole("ROLE_USER");
                 estudanteDAO.save(e2);
             }
 

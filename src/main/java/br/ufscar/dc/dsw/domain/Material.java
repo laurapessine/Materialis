@@ -14,8 +14,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
-@Table(name = "Material")
+@Table(name = "material")
 public class Material extends AbstractEntity<Long> {
     @NotBlank(message = "{NotBlank.material.titulo}")
     @Column(nullable = false, length = 255)
@@ -49,6 +52,7 @@ public class Material extends AbstractEntity<Long> {
     @Column(name = "estado_conservacao", nullable = false)
     private EstadoConservacao estadoConservacao;
 
+    @JsonIgnore
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] imagem;
@@ -122,6 +126,15 @@ public class Material extends AbstractEntity<Long> {
 
     public void setImagem(byte[] imagem) {
         this.imagem = imagem;
+    }
+
+    @JsonProperty("imagemUrl")
+    public String getImagemUrl() {
+        if (getId() != null && getNomeImagem() != null) {
+            return "/materiais/imagem/" + getId();
+        }
+        return null;
+        //Tava mostrando um negócio gigantesco sem isso
     }
 
     public String getNomeImagem() {

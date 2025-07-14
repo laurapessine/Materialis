@@ -34,9 +34,9 @@ public class EmprestimoService implements IEmprestimoService {
 
     @Override
     public void salvar(Emprestimo emprestimo) {
-        emprestimo.setDataSolicitacao(emprestimo.getDataSolicitacao());
-        emprestimo.setStatus(emprestimo.getStatus());
+        System.out.println("--- [DEBUG] 6. SERVIÇO RECEBEU PARA SALVAR. EXECUTANDO dao.save()... ---");
         dao.save(emprestimo);
+        System.out.println("--- [DEBUG] 7. dao.save() EXECUTADO SEM ERROS. ---");
     }
 
     @Override
@@ -130,4 +130,9 @@ public class EmprestimoService implements IEmprestimoService {
             }
         }
     }
+
+    @Override
+    public List<Emprestimo> buscarPorMaterial(Material material) {
+        return dao.findByMaterial(material);
+}
 }

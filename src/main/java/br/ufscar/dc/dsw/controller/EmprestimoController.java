@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
+//import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +15,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ufscar.dc.dsw.domain.Emprestimo;
 import br.ufscar.dc.dsw.domain.Estudante;
 import br.ufscar.dc.dsw.domain.Material;
+import br.ufscar.dc.dsw.domain.Emprestimo.Status;
 import br.ufscar.dc.dsw.service.spec.IEmprestimoService;
 import br.ufscar.dc.dsw.service.spec.IEstudanteService;
 import br.ufscar.dc.dsw.service.spec.IMaterialService;
-import jakarta.validation.Valid;
+//import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/emprestimos")
@@ -57,34 +58,35 @@ public class EmprestimoController {
             attr.addFlashAttribute("fail", "Você já tem uma proposta em aberto para este material.");
             return "redirect:/materiais/listar";
         }
-        Emprestimo emprestimo = new Emprestimo();
-        emprestimo.setMaterial(material);
-        emprestimo.setEstudante(estudante);
-        model.addAttribute("emprestimo", emprestimo);
+
+        model.addAttribute("emprestimo", new Emprestimo());
+        model.addAttribute("material", material);
+
+        model.addAttribute("material", material);
         return "emprestimo/solicitar";
     }
 
     @PostMapping("/salvarSolicitacao")
-    public String salvarSolicitacao(@Valid Emprestimo emprestimo, BindingResult result, RedirectAttributes attr, ModelMap model) {
+    public String salvarSolicitacao(Emprestimo emprestimo, @RequestParam("materialId") Long materialId, RedirectAttributes attr) {
         Estudante estudante = getLoggedInEstudante();
-        if (estudante == null) {
-            attr.addFlashAttribute("fail", "Sessão de estudante inválida.");
-            return "redirect:/login";
+        Material material = materialService.buscarPorId(materialId);
+        if (estudante == null || material == null) {
+            attr.addFlashAttribute("fail", "Erro: Usuário ou material inválido.");
+            return "redirect:/materiais/listar";
+        }
+        if (emprestimoService.hasOpenProposal(estudante, material)) {
+            attr.addFlashAttribute("fail", "Você já tem uma proposta em aberto para este material.");
+            return "redirect:/materiais/listar";
         }
         emprestimo.setEstudante(estudante);
-        if (result.hasErrors()) {
-            model.addAttribute("material", emprestimo.getMaterial());
-            return "emprestimo/solicitar";
-        }
-        if (emprestimoService.hasOpenProposal(estudante, emprestimo.getMaterial())) {
-            result.rejectValue("material", "error.emprestimo", "Você já tem uma proposta em aberto para este material.");
-            model.addAttribute("material", emprestimo.getMaterial());
-            return "emprestimo/solicitar";
-        }
+        emprestimo.setMaterial(material);
+    
         emprestimoService.salvar(emprestimo);
+        
         attr.addFlashAttribute("sucesso", "Solicitação de empréstimo enviada com sucesso!");
-        return "redirect:/materiais/listar";
+        return "redirect:/emprestimos/meus-emprestimos";
     }
+
 
     @GetMapping("/listar")
     public String listarTodosEmprestimos(ModelMap model) {
@@ -115,16 +117,74 @@ public class EmprestimoController {
     }
 
     @PostMapping("/aprovar/{id}")
-    public String aprovarEmprestimo(@PathVariable("id") Long id, RedirectAttributes attr) {
-        emprestimoService.aprovarEmprestimo(id);
-        attr.addFlashAttribute("sucesso", "Empréstimo aprovado com sucesso!");
+    public String aprovarSolicitacao(@PathVariable("id") Long id, RedirectAttributes attr) {
+        System.out.println("\n--- [DEBUG] AÇÃO DE APROVAR INICIADA ---");
+        System.out.println("   - ID do Empréstimo recebido: " + id);
+
+        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
+
+        if (emprestimo != null) {
+            System.out.println("   - Empréstimo encontrado no banco.");
+            emprestimo.setStatus(Status.APROVADO);
+            emprestimoService.salvar(emprestimo);
+            System.out.println("   - Status alterado para APROVADO e salvo.");
+            attr.addFlashAttribute("sucesso", "Solicitação aprovada com sucesso.");
+        } else {
+            System.out.println("   - FALHA: Empréstimo com ID " + id + " não encontrado.");
+            attr.addFlashAttribute("fail", "Não foi possível encontrar a solicitação para aprovar.");
+        }
+
         return "redirect:/emprestimos/solicitacoes-para-meus-materiais";
     }
 
     @PostMapping("/recusar/{id}")
-    public String recusarEmprestimo(@PathVariable("id") Long id, @RequestParam(value = "justificativa", required = false) String justificativa, RedirectAttributes attr) {
-        emprestimoService.recusarEmprestimo(id, justificativa);
-        attr.addFlashAttribute("sucesso", "Empréstimo recusado com sucesso!");
+    public String recusarSolicitacao(@PathVariable("id") Long id, RedirectAttributes attr) {
+        System.out.println("\n--- [DEBUG] AÇÃO DE RECUSAR INICIADA ---");
+        System.out.println("   - ID do Empréstimo recebido: " + id);
+        
+        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
+
+        if (emprestimo != null) {
+            System.out.println("   - Empréstimo encontrado no banco.");
+            emprestimo.setStatus(Status.RECUSADO);
+            emprestimoService.salvar(emprestimo);
+            System.out.println("   - Status alterado para RECUSADO e salvo.");
+            attr.addFlashAttribute("sucesso", "Solicitação recusada com sucesso.");
+        } else {
+            System.out.println("   - FALHA: Empréstimo com ID " + id + " não encontrado.");
+            attr.addFlashAttribute("fail", "Não foi possível encontrar a solicitação para recusar.");
+        }
+
         return "redirect:/emprestimos/solicitacoes-para-meus-materiais";
+    }
+    @PostMapping("/iniciar/{id}")
+    public String iniciarEmprestimo(@PathVariable("id") Long id, RedirectAttributes attr) {
+        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
+
+        if (emprestimo != null && emprestimo.getStatus() == Emprestimo.Status.APROVADO) {
+            emprestimo.setStatus(Emprestimo.Status.EM_ANDAMENTO);
+            emprestimoService.salvar(emprestimo);
+            attr.addFlashAttribute("sucesso", "Empréstimo iniciado com sucesso!");
+        } else {
+            attr.addFlashAttribute("fail", "Não foi possível iniciar o empréstimo.");
+        }
+
+        return "redirect:/emprestimos/meus-emprestimos";
+    }
+
+    @PostMapping("/concluir/{id}")
+    public String concluirEmprestimo(@PathVariable("id") Long id, RedirectAttributes attr) {
+        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
+
+        if (emprestimo != null && emprestimo.getStatus() == Emprestimo.Status.EM_ANDAMENTO) {
+            emprestimo.setStatus(Emprestimo.Status.CONCLUIDO);
+            emprestimo.setDataDevolucaoReal(java.time.LocalDate.now());
+            emprestimoService.salvar(emprestimo);
+            attr.addFlashAttribute("sucesso", "Empréstimo concluído com sucesso!");
+        } else {
+            attr.addFlashAttribute("fail", "Não foi possível concluir o empréstimo.");
+        }
+
+        return "redirect:/emprestimos/meus-emprestimos";
     }
 }

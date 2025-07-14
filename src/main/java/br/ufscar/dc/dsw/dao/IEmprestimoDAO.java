@@ -14,4 +14,6 @@ public interface IEmprestimoDAO extends CrudRepository<Emprestimo, Long> {
     List<Emprestimo> findByMaterial_Estudante(Estudante estudanteDoador);
 
     boolean existsByEstudanteAndMaterialAndStatus(Estudante estudante, Material material, Emprestimo.Status status);
+
+    List<Emprestimo> findByMaterial(Material material);
 }

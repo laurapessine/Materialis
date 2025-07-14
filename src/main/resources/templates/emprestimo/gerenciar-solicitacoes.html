@@ -15,18 +15,66 @@
             color: #333;
             line-height: 1.6;
         }
-        nav {
+        .main-header {
+            background-color: #0056b3; 
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #0056b3;
-            color: #fff;
-            padding: 1rem 2rem;
+            height: 60px;
+            border-bottom: 1px solid #0056b3;
         }
-        nav span {
-            color: #fff;
+        .main-header .logo {
+            font-size: 1.5rem;
             font-weight: bold;
-            font-size: 1.2rem;
+            color: #ddd; 
+            text-decoration: none;
+        }
+        .main-header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .main-header nav a {
+            color: #ddd; 
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .main-header nav a:hover {
+            color: #0056b3;
+        }
+        .main-header .logout-form button {
+            background: none; border: none; color: #ddd;
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+            font-family: inherit;
+        }
+        .main-header .logout-form button:hover {
+            color: #0056b3;
+        }
+        
+        .page-action-header {
+            background-color: #0056b3; 
+            padding: 1rem 2rem;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-action-header .page-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .page-action-header .btn-primary {
+            background-color: #fff;
+            color: #0056b3;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
         }
         .container {
             max-width: 1280px;
@@ -74,9 +122,31 @@
 </head>
 <body>
     <section class="layout-content">
+        <header class="main-header">
+        <a th:href="@{/}" class="logo">Materialis</a>
         <nav>
-            <span th:text="#{nav.solicitacoesRecebidas}">Gerenciar Solicitações</span>
+            <ul>
+                <li><a th:href="@{/materiais/listar}">Explorar Materiais</a></li>
+                <li sec:authorize="hasRole('USER')"><a th:href="@{/materiais/meus-materiais}">Meus Materiais</a></li>
+                <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/meus-emprestimos}">Meus Empréstimos</a></li>
+                <li sec:authorize="hasRole('USER')"><a th:href="@{/emprestimos/solicitacoes-para-meus-materiais}">Gerenciar Solicitações</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="logout-form">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
         </nav>
+    </header>
+
+    <div class="page-action-header">
+        <span class="page-title">Gerenciar Solicitações Recebidas</span>
+    </div>
+
+    <div class="container">
+        <div th:if="${sucesso}" class="flash success" role="alert" th:text="${sucesso}"></div>
+        <div th:if="${fail}" class="flash fail" role="alert" th:text="${fail}"></div>
+    </div>
         <div class="container" id="listagem">
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
